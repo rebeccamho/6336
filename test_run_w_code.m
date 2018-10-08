@@ -11,7 +11,7 @@ dens_air = 1.225; %Air density [kg/m^3]
 hc_air = 1e3; %Air specific heat capacity [J/kg*k]
 
 
-To = 0; %Room temperature 
+To = 298; %Room temperature 
 
 %% adding layers of k/(p*Cp)
 
