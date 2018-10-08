@@ -61,13 +61,9 @@ end
 % construct 2d sparse matrix
 A2d = spdiags(B2d,d2d,A2d);
 
-<<<<<<< HEAD
-% A2d = -1*A2d/(delt^2); %Add -1 to be consistent with definiton. 
-% A2d = -1*A2d;
-=======
+
 A2d = -1*A2d/(delt^2); %Add -1 to be consistent with definiton. 
 %A2d = -1*A2d;
->>>>>>> 76312ee6cd7bce403a4d966ed0563c8f2f90f223
 %% Construct B Matrix.
 
 B = zeros(nPoints*nLayers,size(u,2)) ;
@@ -80,11 +76,7 @@ B(1:nPoints,3) = B(1:nPoints,3)+1;
 B(1:nPoints:(nPoints*nLayers),2) = B(1:nPoints:(nPoints*nLayers),2) + 1; 
 
 %Top Edge, leakage to air. 
-<<<<<<< HEAD
-B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,2) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,2)+ 1; 
-=======
 B((2+(nLayers-1)*(nPoints)):nPoints*nLayers-1,2) = B((2+(nLayers-1)*(nPoints)):nPoints*nLayers-1,2)+ 1; 
->>>>>>> 76312ee6cd7bce403a4d966ed0563c8f2f90f223
 
 %Right Edge, leakage to air.
 B((nPoints:nPoints:nPoints*nLayers),2) =B((nPoints:nPoints:nPoints*nLayers),2) + 1;
@@ -109,11 +101,8 @@ u(3) = u(3)*delt;
 % figure; 
 % subplot(121)
 % spy(A2d)
-<<<<<<< HEAD
 % figTitle = ['sparsity pattern for ' int2str(nLayers) ' layer IC with ' int2str(nPoints) ' points per layer'];
 % title(figTitle,'fontsize',20)
-=======
->>>>>>> 76312ee6cd7bce403a4d966ed0563c8f2f90f223
 % subplot(122)
 % imagesc(A2d)
 % axis square
