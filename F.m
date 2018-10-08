@@ -62,7 +62,7 @@ end
 A2d = spdiags(B2d,d2d,A2d);
 
 
-A2d = -1*A2d/(delt^2); %Add -1 to be consistent with definiton. 
+% A2d = -1*A2d/(delt^2); %Add -1 to be consistent with definiton. 
 %A2d = -1*A2d;
 %% Construct B Matrix.
 
