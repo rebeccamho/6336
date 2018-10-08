@@ -1,13 +1,6 @@
-<<<<<<< HEAD
 clear all; close all; clc;
 nLayers = 5;
-nPoints = 100;
-=======
-clc
-clear all
-nLayers = 5;
 nPoints = 10;
->>>>>>> 76312ee6cd7bce403a4d966ed0563c8f2f90f223
 p= zeros(nPoints,nLayers); % A, k/(p*Cp)
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature to start
@@ -17,11 +10,8 @@ dens_air = 1.225; %Air density [kg/m^3]
 hc_air = 1e3; %Air specific heat capacity [J/kg*k]
 
 
-<<<<<<< HEAD
 To = 298; %Room temperature 
-=======
-To = 0; %Room temperature 
->>>>>>> 76312ee6cd7bce403a4d966ed0563c8f2f90f223
+
 
 %% adding layers of k/(p*Cp)
 
@@ -63,11 +53,7 @@ hcap(5,:) = hc_Cu;
 %% Calculate p matrix. 
 p = k./(dens.*hcap); % A, k/(p*Cp)
 %% Construct u vector. 
-<<<<<<< HEAD
 Power_diss = 20; %Units [W/m^3], Power dissipated per transistor
-=======
-Power_diss = 0; %Units [W/m^3], Power dissipated per transistor
->>>>>>> 76312ee6cd7bce403a4d966ed0563c8f2f90f223
 Source_Trans = Power_diss/(dens_Si*hc_Si);
 Source_air = To*(kamb/(dens_air*hc_air)); %Units, [W/m^3], heat source for air BC. 
 Source_SiO2 = To*(kBond/(dens_Bond*hc_Bond)); %Units, [W/m^3], heat source for SiO2 BC. 
@@ -83,15 +69,10 @@ dx_dt = F(x_start,u,p);
 %% Run Euler script. 
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature Start
-<<<<<<< HEAD
 t_start = 1;
 t_stop = 201;
 timestep = 10; 
-=======
-t_start = 0.1;
-t_stop = 8;
-timestep = 0.1; 
->>>>>>> 76312ee6cd7bce403a4d966ed0563c8f2f90f223
+
 
 
 eval_u = u;
