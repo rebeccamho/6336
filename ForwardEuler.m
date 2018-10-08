@@ -33,7 +33,7 @@ for n=1:ceil((t_stop-t_start)/timestep)
 %    end
    figure(2)
 
-   imagesc(reshape(X(:,n+1),10,5)')
+   imagesc(reshape(X(:,n+1),nPoints,nLayers)')
    colorbar;
    %pause;
 end
