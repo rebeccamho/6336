@@ -9,18 +9,27 @@ function X = ForwardEuler(eval_f,x_start,eval_u,p,t_start,t_stop,timestep,visual
 
 % copyright Luca Daniel, MIT 2018
 
+<<<<<<< HEAD
 nLayers= size(p,1);
 nPoints=size(p,2);
 
+=======
+>>>>>>> 76312ee6cd7bce403a4d966ed0563c8f2f90f223
 X(:,1) = x_start;
 t(1) = t_start;
 % if visualize
 %    visualizeResults(t,X,1,'.b');
 % end
    figure(2)
+<<<<<<< HEAD
    imagesc(reshape(X(:,1),nPoints,nLayers)')
    colorbar;
 %    pause;
+=======
+   imagesc(reshape(X(:,1),10,5)')
+   colorbar;
+   %pause;
+>>>>>>> 76312ee6cd7bce403a4d966ed0563c8f2f90f223
 for n=1:ceil((t_stop-t_start)/timestep)
    dt = min(timestep, (t_stop-t(n)));
    t(n+1)= t(n) + dt;
@@ -31,7 +40,13 @@ for n=1:ceil((t_stop-t_start)/timestep)
 %       visualizeResults(t,X,n+1,'.b');
 %    end
    figure(2)
+<<<<<<< HEAD
    imagesc(reshape(X(:,n+1),nPoints,nLayers)')
    colorbar;
 %    pause;
+=======
+   imagesc(reshape(X(:,n+1),10,5)')
+   colorbar;
+   %pause;
+>>>>>>> 76312ee6cd7bce403a4d966ed0563c8f2f90f223
 end
