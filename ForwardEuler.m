@@ -17,7 +17,7 @@ t(1) = t_start;
    figure(2)
    imagesc(reshape(X(:,1),10,5)')
    colorbar;
-   pause;
+   %pause;
 for n=1:ceil((t_stop-t_start)/timestep)
    dt = min(timestep, (t_stop-t(n)));
    t(n+1)= t(n) + dt;
@@ -30,5 +30,5 @@ for n=1:ceil((t_stop-t_start)/timestep)
    figure(2)
    imagesc(reshape(X(:,n+1),10,5)')
    colorbar;
-   pause;
+   %pause;
 end

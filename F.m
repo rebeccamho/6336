@@ -75,7 +75,7 @@ B(1:nPoints,3) = B(1:nPoints,3)+1;
 B(1:nPoints:(nPoints*nLayers),2) = B(1:nPoints:(nPoints*nLayers),2) + 1; 
 
 %Top Edge, leakage to air. 
-B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,2) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,2)+ 1; 
+B((2+(nLayers-1)*(nPoints)):nPoints*nLayers-1,2) = B((2+(nLayers-1)*(nPoints)):nPoints*nLayers-1,2)+ 1; 
 
 %Right Edge, leakage to air.
 B((nPoints:nPoints:nPoints*nLayers),2) =B((nPoints:nPoints:nPoints*nLayers),2) + 1;

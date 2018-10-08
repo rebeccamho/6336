@@ -70,7 +70,7 @@ dx_dt = F(x_start,u,p);
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature Start
 t_start = 0.1;
-t_stop = 2;
+t_stop = 8;
 timestep = 0.1; 
 
 
