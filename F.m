@@ -113,4 +113,4 @@ u(3) = u(3)*delt^2;
 
 
 
-dx_dt = A2d*x*delt^2+B*u'; % took out A2d*delt^2  
+dx_dt = A2d*x*delt^2+B*u'; % unsure of *delt^2 
