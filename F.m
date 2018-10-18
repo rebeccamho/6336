@@ -4,8 +4,7 @@ function dx_dt = F(x,u,p)
 % p contains all parameters of system (thermal conductivity)
 % nLayers = p.layers;
 % nPoints = p.points;
-kAmb = 0.02; % Units [W/m*k]
-
+kAmb = u(2)/298; % Units [W/m*k]
 nLayers= size(p,1);
 nPoints=size(p,2);
 ChipW = 1e-2; % chipwidth is 1 cm.
@@ -28,7 +27,9 @@ d2d = [-N -1 0 1 N];
 A2d = sparse(N*nLayers,N*nLayers);
 B2d = zeros(min(size(A2d)),length(d2d));
 % bands
-B2d(:,1) = -kr; B2d(:,5) = -kr; % vertical cxns
+%B2d(1:40,1) = -kr(11:end); %vertical
+B2d(:,1) = -kr;
+B2d(:,5) = -kr; % vertical cxns
 B2d(:,2) = -kr; B2d(:,4) = -kr; % horizontal cxns
 for i = N:N:min(size(A2d)) % horizontal cxns, 0 every N bc of edge
     B2d(i,2) = 0;
@@ -42,10 +43,10 @@ B2d(botLeft,3) = B2d(botLeft,3) + kAmb + kr(botLeft+1) + kr(botLeft-N);
 B2d(botRight,3) = B2d(botRight,3) + kAmb + kr(botRight-1) + kr(botRight-N);
 % edges
 for i = topLeft+1:topRight-1 % top edge
-    B2d(i,3) = B2d(i,3) + kAmb + kr(i+1) + kr(i-1) + kr(i+N);
+    B2d(i,3) = B2d(i,3) + kAmb + kr(i+1) + kr(i-1) + kr(i+N); % removed kAmb?
 end
 for i = botLeft+1:botRight-1 % bottom edge
-    B2d(i,3) = B2d(i,3) + kAmb + kr(i+1) + kr(i-1) + kr(i-N);
+    B2d(i,3) = B2d(i,3) + kr(i+1) + kr(i-1) + kr(i-N);
 end
 for i = topLeft+N:N:botLeft-N % left and right edges
     j = i+N-1; % index for right edge
@@ -62,31 +63,34 @@ end
 A2d = spdiags(B2d,d2d,A2d);
 
 
-A2d = -1*A2d/(delt^2); %Add -1 to be consistent with definiton. 
+A2d = -1*A2d/(delt^2); % changed / to *delt^2
 %A2d = -1*A2d;
 %% Construct B Matrix.
 
 B = zeros(nPoints*nLayers,size(u,2)) ;
-B(1:nPoints,1) = B(1:nPoints,1)+1; %First layer, experiencing transistors heating up.
+%First layer, experiencing transistors heating up.
+B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,1) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,1)+1; 
+%B(1:nPoints,1) = B(1:nPoints,1) + 1;
 
 %Bottom Edge , also first layer, leakage to SiO2. 
-B(1:nPoints,3) = B(1:nPoints,3)+1; 
+B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,3) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,3)+1; 
 
 %Left Edge, leakage to air. 
 B(1:nPoints:(nPoints*nLayers),2) = B(1:nPoints:(nPoints*nLayers),2) + 1; 
 
 %Top Edge, leakage to air. 
-B((2+(nLayers-1)*(nPoints)):nPoints*nLayers-1,2) = B((2+(nLayers-1)*(nPoints)):nPoints*nLayers-1,2)+ 1; 
+%B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,2) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,2)+ 1; 
+%B((1+(nLayers-1)*(nPoints))+1:nPoints*nLayers-1,2) = B((1+(nLayers-1)*(nPoints))+1:nPoints*nLayers-1,2)+ 1; 
+B(2:nPoints-1,2) = B(2:nPoints-1,2) +1;
 
 %Right Edge, leakage to air.
 B((nPoints:nPoints:nPoints*nLayers),2) =B((nPoints:nPoints:nPoints*nLayers),2) + 1;
 
 %% Adjust sources vector. 
 
-
-u(1) = u(1)*delt^2; %reference lecture 3, slide 27. 
-u(2) = u(2)*delt; 
-u(3) = u(3)*delt;
+u(1) = u(1)/delt^0; %reference lecture 3, slide 27. **still need to work out units here
+u(2) = u(2)/delt^0; % was *, changed to /
+u(3) = u(3)*delt^2;
 % u(2) = u(2)/delt^2; %Based on hand calc. Errors may be made here. 
 % u(3) = u(3)/delt^2; 
 
@@ -109,4 +113,4 @@ u(3) = u(3)*delt;
 
 
 
-dx_dt = A2d*x*delt^2+B*u'; 
+dx_dt = A2d*x*delt^2+B*u'; % took out A2d*delt^2  
