@@ -63,7 +63,7 @@ end
 A2d = spdiags(B2d,d2d,A2d);
 
 
-A2d = -1*A2d/(delt^2); % changed / to *delt^2
+A2d = -1*A2d/(delt^2); 
 %A2d = -1*A2d;
 %% Construct B Matrix.
 
