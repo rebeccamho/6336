@@ -8,6 +8,7 @@ kAmb = u(2)/298; % Units [W/m*k]
 nLayers= size(p,1);
 nPoints=size(p,2);
 ChipW = 1e-2; % chipwidth is 1 cm.
+%ChipW = 1;
 delt = ChipW/(nPoints-1);
 % x = p\u;
 
@@ -89,7 +90,7 @@ B((nPoints:nPoints:nPoints*nLayers),2) =B((nPoints:nPoints:nPoints*nLayers),2) +
 %% Adjust sources vector. 
 
 u(1) = u(1)/delt^0; %reference lecture 3, slide 27. **still need to work out units here
-u(2) = u(2)/delt^0; % was *, changed to /
+u(2) = u(2)/delt^2; % was *, changed to /
 u(3) = u(3)*delt^2;
 % u(2) = u(2)/delt^2; %Based on hand calc. Errors may be made here. 
 % u(3) = u(3)/delt^2; 
@@ -113,4 +114,4 @@ u(3) = u(3)*delt^2;
 
 
 
-dx_dt = A2d*x*delt^2+B*u'; % unsure of *delt^2 
+dx_dt = A2d*x+B*u'; % unsure of *delt^2 

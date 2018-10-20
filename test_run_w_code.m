@@ -29,6 +29,7 @@ kGr = 5000; % monolayer graphene
 
 ktest = 80;
 k(:,:) = ktest;
+%k(2,:) = 80;
 
 %Matrix for density, untis kg/m^3
 dens = ones(nLayers,nPoints);
@@ -62,25 +63,28 @@ hcap(:,:) = hctest;
 %% Calculate p matrix. 
 p = k./(dens.*hcap); % A, k/(p*Cp)
 %% Construct u vector. 
-Power_diss = 20; %Units [W/m^3], Power dissipated per transistor
+Power_diss = 2e6; %Units [W/m^3], Power dissipated per transistor
 Source_Trans = Power_diss/(dens_Si*hc_Si);
 Source_air = To*(kamb/(dens_air*hc_air)); %Units, [W/m^3], heat source for air BC. 
 %Source_SiO2 = To*(kBond/(dens_Bond*hc_Bond)); %Units, [W/m^3], heat source for SiO2 BC. 
 Source_SiO2 = 0;
 
-u = [Source_Trans, Source_air, Source_SiO2]; 
+u = [Source_Trans, Source_air, Source_SiO2];
 %First entry is for the heat source in first layer. 
 %Second entry is the heat source for the boundary conditions. 
 
 %% Use function F
+p = p/100;
+u = u/100;
+
 dx_dt = F(x_start,u,p);
 
 %% Run Euler script. 
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature Start
 t_start = 0.1;
-t_stop = 1000;
-timestep = 20; 
+t_stop = 100;
+timestep = 5; 
 
 
 
