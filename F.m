@@ -7,8 +7,8 @@ function dx_dt = F(x,u,p)
 kAmb = u(2)/298; % Units [W/m*k]
 nLayers= size(p,1);
 nPoints=size(p,2);
-ChipW = 1e-2; % chipwidth is 1 cm.
-%ChipW = 1;
+%ChipW = 1e-2; % chipwidth is 1 cm.
+ChipW = 1;
 delt = ChipW/(nPoints-1);
 % x = p\u;
 

@@ -1,6 +1,6 @@
 clear all; close all; clc;
-nLayers = 4;
-nPoints = 4;
+nLayers = 10;
+nPoints = 10;
 p= zeros(nPoints,nLayers); % A, k/(p*Cp)
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature to start
@@ -74,8 +74,8 @@ u = [Source_Trans, Source_air, Source_SiO2];
 %Second entry is the heat source for the boundary conditions. 
 
 %% Use function F
-p = p/100;
-u = u/100;
+%p = p/100;
+%u = u/100;
 
 dx_dt = F(x_start,u,p);
 
