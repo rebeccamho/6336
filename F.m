@@ -7,9 +7,11 @@ function dx_dt = F(x,u,p)
 kAmb = u(2)/298; % Units [W/m*k]
 nLayers= size(p,1);
 nPoints=size(p,2);
-%ChipW = 1e-2; % chipwidth is 1 cm.
-ChipW = 1;
-delt = ChipW/(nPoints-1);
+ChipW = 1; % chip width is 1 cm.
+ChipH = 1; % chip height is 1 mm.
+%ChipW = 1;
+deltx = ChipW/(nPoints-1);
+delty = ChipH/(nLayers-1);
 % x = p\u;
 
 k = p;
@@ -29,8 +31,7 @@ A2d = sparse(N*nLayers,N*nLayers);
 B2d = zeros(min(size(A2d)),length(d2d));
 % bands
 %B2d(1:40,1) = -kr(11:end); %vertical
-B2d(:,1) = -kr;
-B2d(:,5) = -kr; % vertical cxns
+B2d(:,1) = -kr; B2d(:,5) = -kr; % vertical cxns
 B2d(:,2) = -kr; B2d(:,4) = -kr; % horizontal cxns
 for i = N:N:min(size(A2d)) % horizontal cxns, 0 every N bc of edge
     B2d(i,2) = 0;
@@ -60,12 +61,20 @@ for i = N+1:botRight-N
         B2d(i,3) = B2d(i,3) + kr(i+1) + kr(i-1) + kr(i-N) + kr(i+N);
     end
 end
+% horizontal 
+B2d(:,2) = B2d(:,2)/(deltx^2);
+B2d(:,4) = B2d(:,4)/(deltx^2);
+% middle
+B2d(:,3) = B2d(:,3)*(1/(deltx^2) + 1/(delty^2));
+% vertical
+B2d(:,1) = B2d(:,1)/(delty^2);
+B2d(:,5) = B2d(:,5)/(delty^2);
+
 % construct 2d sparse matrix
 A2d = spdiags(B2d,d2d,A2d);
 
-
-A2d = -1*A2d/(delt^2); 
-%A2d = -1*A2d;
+%A2d = -1*A2d/(delt^2); 
+A2d = 1*A2d;
 %% Construct B Matrix.
 
 B = zeros(nPoints*nLayers,size(u,2)) ;
@@ -89,9 +98,9 @@ B((nPoints:nPoints:nPoints*nLayers),2) =B((nPoints:nPoints:nPoints*nLayers),2) +
 
 %% Adjust sources vector. 
 
-u(1) = u(1)/delt^0; %reference lecture 3, slide 27. **still need to work out units here
-u(2) = u(2)/delt^2; % was *, changed to /
-u(3) = u(3)*delt^2;
+u(1) = u(1)/delty^0; %reference lecture 3, slide 27. **still need to work out units here
+u(2) = u(2)*(1/(deltx^2) + 1/(delty^2)); % was *, changed to /
+u(3) = u(3)*delty^2;
 % u(2) = u(2)/delt^2; %Based on hand calc. Errors may be made here. 
 % u(3) = u(3)/delt^2; 
 

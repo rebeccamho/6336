@@ -1,5 +1,5 @@
 clear all; close all; clc;
-nLayers = 10;
+nLayers = 5;
 nPoints = 10;
 p= zeros(nPoints,nLayers); % A, k/(p*Cp)
 x_start = zeros(nLayers*nPoints,1);
@@ -63,7 +63,7 @@ hcap(:,:) = hctest;
 %% Calculate p matrix. 
 p = k./(dens.*hcap); % A, k/(p*Cp)
 %% Construct u vector. 
-Power_diss = 2e6; %Units [W/m^3], Power dissipated per transistor
+Power_diss = 2e5; %Units [W/m^3], Power dissipated per transistor
 Source_Trans = Power_diss/(dens_Si*hc_Si);
 Source_air = To*(kamb/(dens_air*hc_air)); %Units, [W/m^3], heat source for air BC. 
 %Source_SiO2 = To*(kBond/(dens_Bond*hc_Bond)); %Units, [W/m^3], heat source for SiO2 BC. 
@@ -83,8 +83,8 @@ dx_dt = F(x_start,u,p);
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature Start
 t_start = 0.1;
-t_stop = 100;
-timestep = 5; 
+t_stop = 1000;
+timestep = 10; 
 
 
 
