@@ -69,7 +69,7 @@ Source_air = To*(kamb/(dens_air*hc_air)); %Units, [W/m^3], heat source for air B
 %Source_SiO2 = To*(kBond/(dens_Bond*hc_Bond)); %Units, [W/m^3], heat source for SiO2 BC. 
 Source_SiO2 = 0;
 
-u = [Source_Trans, Source_air, Source_SiO2];
+u = [Source_Trans, Source_air, Source_air, Source_SiO2];
 %First entry is for the heat source in first layer. 
 %Second entry is the heat source for the boundary conditions. 
 
@@ -83,7 +83,7 @@ dx_dt = F(x_start,u,p);
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature Start
 t_start = 0.1;
-t_stop = 1000;
+t_stop = 100;
 timestep = 10; 
 
 

@@ -38,34 +38,32 @@ for i = N:N:min(size(A2d)) % horizontal cxns, 0 every N bc of edge
     B2d(i+1,4) = 0; % i+1 bc of how it is put into A2d with spdiags
 end
 % main diagonal
-% corners
-B2d(topLeft,3) = B2d(topLeft,3) + kAmb + kr(topLeft+1) + kr(topLeft+N);
-B2d(topRight,3) = B2d(topRight,3) + kAmb + kr(topRight-1) + kr(topRight+N);
-B2d(botLeft,3) = B2d(botLeft,3) + kAmb + kr(botLeft+1) + kr(botLeft-N);
-B2d(botRight,3) = B2d(botRight,3) + kAmb + kr(botRight-1) + kr(botRight-N);
+% corners 
+B2d(topLeft,3) = B2d(topLeft,3) + (kr(topLeft+1) + kAmb)/(deltx^2) + (kr(topLeft+N) + kAmb)/(delty^2);
+B2d(topRight,3) = B2d(topRight,3) + (kr(topRight-1) + kAmb)/(deltx^2) + (kr(topRight+N) + kAmb)/(delty^2);
+B2d(botLeft,3) = B2d(botLeft,3) + (kr(botLeft+1) + kAmb)/(deltx^2) + kr(botLeft-N)/(delty^2);
+B2d(botRight,3) = B2d(botRight,3) + (kr(botRight-1) + kAmb)/(deltx^2) + kr(botRight-N)/(delty^2);
 % edges
 for i = topLeft+1:topRight-1 % top edge
-    B2d(i,3) = B2d(i,3) + kAmb + kr(i+1) + kr(i-1) + kr(i+N); % removed kAmb?
+    B2d(i,3) = B2d(i,3) + (kr(i+1) + kr(i-1))/(deltx^2) + (kr(i+N) + kAmb)/(delty^2); 
 end
 for i = botLeft+1:botRight-1 % bottom edge
-    B2d(i,3) = B2d(i,3) + kr(i+1) + kr(i-1) + kr(i-N);
+    B2d(i,3) = B2d(i,3) + (kr(i+1) + kr(i-1))/(deltx^2) + kr(i-N)/(delty^2);
 end
 for i = topLeft+N:N:botLeft-N % left and right edges
     j = i+N-1; % index for right edge
-    B2d(i,3) = B2d(i,3) + kAmb + kr(i+1) + kr(i-N) + kr(i+N); % left
-    B2d(j,3) = B2d(j,3) + kAmb + kr(j-1) + kr(j-N) + kr(j+N); % right
+    B2d(i,3) = B2d(i,3) + (kAmb + kr(i+1))/(deltx^2) + (kr(i-N) + kr(i+N))/(delty^2); % left
+    B2d(j,3) = B2d(j,3) + (kAmb + kr(j-1))/(deltx^2) + (kr(j-N) + kr(j+N))/(delty^2); % right
 end
 % interior
 for i = N+1:botRight-N
     if B2d(i,3) == 0 % interior node
-        B2d(i,3) = B2d(i,3) + kr(i+1) + kr(i-1) + kr(i-N) + kr(i+N);
+        B2d(i,3) = B2d(i,3) + (kr(i+1) + kr(i-1))/(deltx^2) + (kr(i-N) + kr(i+N))/(delty^2);
     end
 end
 % horizontal 
 B2d(:,2) = B2d(:,2)/(deltx^2);
 B2d(:,4) = B2d(:,4)/(deltx^2);
-% middle
-B2d(:,3) = B2d(:,3)*(1/(deltx^2) + 1/(delty^2));
 % vertical
 B2d(:,1) = B2d(:,1)/(delty^2);
 B2d(:,5) = B2d(:,5)/(delty^2);
@@ -74,33 +72,38 @@ B2d(:,5) = B2d(:,5)/(delty^2);
 A2d = spdiags(B2d,d2d,A2d);
 
 %A2d = -1*A2d/(delt^2); 
-A2d = 1*A2d;
+A2d = -1*A2d;
 %% Construct B Matrix.
-
+% B(:,1) = Transistors heating up
+% B(:,2) = X-dir air leakage
+% B(:,3) = Y-dir air leakage
+% B(:,4) = SiO2 SiO2 leakage
 B = zeros(nPoints*nLayers,size(u,2)) ;
+
+% TRANSISTOR HEAT SOURCE
 %First layer, experiencing transistors heating up.
 B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,1) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,1)+1; 
-%B(1:nPoints,1) = B(1:nPoints,1) + 1;
 
-%Bottom Edge , also first layer, leakage to SiO2. 
-B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,3) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,3)+1; 
-
+% X-DIR AIR LEAKAGE
 %Left Edge, leakage to air. 
 B(1:nPoints:(nPoints*nLayers),2) = B(1:nPoints:(nPoints*nLayers),2) + 1; 
-
-%Top Edge, leakage to air. 
-%B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,2) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,2)+ 1; 
-%B((1+(nLayers-1)*(nPoints))+1:nPoints*nLayers-1,2) = B((1+(nLayers-1)*(nPoints))+1:nPoints*nLayers-1,2)+ 1; 
-B(2:nPoints-1,2) = B(2:nPoints-1,2) +1;
-
 %Right Edge, leakage to air.
-B((nPoints:nPoints:nPoints*nLayers),2) =B((nPoints:nPoints:nPoints*nLayers),2) + 1;
+B((nPoints:nPoints:nPoints*nLayers),2) = B((nPoints:nPoints:nPoints*nLayers),2) + 1;
+
+% Y-DIR AIR LEAKAGE
+%Top Edge, leakage to air. 
+B(1:nPoints,3) = B(1:nPoints,3) +1;
+
+% SIO2 LEAKAGE
+%Bottom Edge , also first layer, leakage to SiO2. 
+B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,4) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,4)+1; 
 
 %% Adjust sources vector. 
 
 u(1) = u(1)/delty^0; %reference lecture 3, slide 27. **still need to work out units here
-u(2) = u(2)*(1/(deltx^2) + 1/(delty^2)); % was *, changed to /
-u(3) = u(3)*delty^2;
+u(2) = u(2)/(deltx^2); % was *, changed to /
+u(3) = u(3)/(delty^2);
+u(4) = u(4)/(delty^2);
 % u(2) = u(2)/delt^2; %Based on hand calc. Errors may be made here. 
 % u(3) = u(3)/delt^2; 
 
