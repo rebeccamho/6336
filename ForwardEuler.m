@@ -1,4 +1,4 @@
-function X = ForwardEuler(eval_f,x_start,eval_u,p,t_start,t_stop,timestep,visualize)
+function X = ForwardEuler(eval_f,x_start,eval_u,p,t_start,t_stop,timestep,visualize,freq)
 % uses Forward Euler to simulate states model dx/dt=f(x,u,p)
 % from state x_start at time t_start
 % until time t_stop, with time intervals timestep
@@ -22,6 +22,7 @@ t(1) = t_start;
    colorbar;
 %    pause;
 
+count = 1;
 for n=1:ceil((t_stop-t_start)/timestep)
    dt = min(timestep, (t_stop-t(n)));
    t(n+1)= t(n) + dt;
@@ -31,9 +32,13 @@ for n=1:ceil((t_stop-t_start)/timestep)
 %    if visualize
 %       visualizeResults(t,X,n+1,'.b');
 %    end
-   figure(2)
+   count = count + 1;
+   if count == freq
+       figure(2)
 
-   imagesc(reshape(X(:,n+1),nPoints,nLayers)')
-   colorbar;
+       imagesc(reshape(X(:,n+1),nPoints,nLayers)')
+       colorbar;
+       count = 1;
+   end
    %pause;
 end
