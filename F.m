@@ -1,4 +1,4 @@
-function dx_dt = F(x,u,p)
+function [dx_dt,A_mat,U_vec] = F(x,u,p)
 %% x is a vector of our unknowns (temperature)
 % u is a vector containing all known sources/excitations (heat flow)
 % p contains all parameters of system (thermal conductivity)
@@ -7,8 +7,8 @@ function dx_dt = F(x,u,p)
 kAmb = u(2)/298; % Units [W/m*k]
 nLayers= size(p,1);
 nPoints=size(p,2);
-ChipW = 1; % chip width is 1 cm.
-ChipH = 1; % chip height is 1 mm.
+ChipW = 0.05; % chip width is 1 cm.
+ChipH = 0.1; % chip height is 1 mm.
 %ChipW = 1;
 deltx = ChipW/(nPoints-1);
 delty = ChipH/(nLayers-1);
@@ -124,6 +124,7 @@ u(4) = u(4)/(delty^2);
 % imagesc(A2d)
 % axis square
 
-
+A_mat = A2d;
+U_vec = B*u';
 
 dx_dt = A2d*x+B*u'; % unsure of *delt^2 
