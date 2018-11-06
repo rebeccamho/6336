@@ -14,12 +14,28 @@ nPoints=size(p,2);
 
 X(:,1) = x_start;
 t(1) = t_start;
+
+pVisualize = struct; 
+pVisualize.params = p; 
+pVisualize.time = t_start; 
+pVisualize.nPoints = nPoints;
+pVisualize.figNum = 10;
+    
 % if visualize
 %    visualizeResults(t,X,1,'.b');
 % end
-   figure(2)
-   imagesc(reshape(X(:,1),nPoints,nLayers)')
-   colorbar;
+%    figure(2)
+%    imagesc(reshape(X(:,1),nPoints,nLayers)')
+%    colorbar;
+    visualizeNetwork(X(:,1),pVisualize);
+    
+    % 	Write to the GIF File
+    filename = 'temperatureProfile.gif';
+    frame = getframe(gcf);
+    im = frame2im(frame);
+    [imind,cm] = rgb2ind(im,256);
+    imwrite(imind,cm,filename,'gif','DelayTime',0.25,'Loopcount',inf);
+
 %    pause;
 
 count = 1;
@@ -34,11 +50,17 @@ for n=1:ceil((t_stop-t_start)/timestep)
 %    end
    count = count + 1;
    if count == freq
-       figure(2)
-
-       imagesc(reshape(X(:,n+1),nPoints,nLayers)')
-       colorbar;
-       count = 1;
+%        figure(2)
+%        imagesc(reshape(X(:,n+1),nPoints,nLayers)')
+%        colorbar;
+        pVisualize.time = t(n+1);
+        visualizeNetwork(X(:,n+1),pVisualize);
+        count = 1;
+        
+        frame = getframe(gcf);
+        im = frame2im(frame);
+        [imind,cm] = rgb2ind(im,256);
+        imwrite(imind,cm,filename,'gif','DelayTime',0.25,'WriteMode','append');
    end
    %pause;
 end

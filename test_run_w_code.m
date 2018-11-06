@@ -1,6 +1,6 @@
 clear all; close all; clc;
-nLayers = 5;
-nPoints = 10;
+nLayers = 10;
+nPoints = 40;
 p= zeros(nPoints,nLayers); % A, k/(p*Cp)
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature to start
@@ -19,11 +19,9 @@ hc_Si = 0.7e3; %Silicon
 hc_Bond = 0.68e3; %SiliconDioxide
 hc_Cu = 0.385e3; %Copper
 hc_Gr = 0.7e3; %Graphite specific heat used instead of graphene. 
-hcap(5,:) = hc_Si;
-hcap(4,:) = hc_Gr;
-hcap(3,:) = hc_Cu;
-hcap(2,:) = hc_Cu;
-hcap(1,:) = hc_Cu;
+hcap(6:10,:) = hc_Si;
+hcap(5,:) = hc_Gr;
+hcap(1:4,:) = hc_Cu;
 % hctest = 0.5e3;
 % hcap(:,:) = hctest;
 
@@ -33,11 +31,9 @@ kSi = 155; % silicon
 kBond = 1.38; % bonding and oxide layer
 kCu = 400; % copper interconnects 
 kGr = 5000; % monolayer graphene
-k(5,:) = kSi; % bottom
-k(4,:) = kGr;
-k(3,:) = kCu;
-k(2,:) = kCu;
-k(1,:) = kCu; % top
+k(6:10,:) = kSi; % bottom
+k(5,:) = kGr;
+k(1:4,:) = kCu; % 1: top
 % ktest = 80;
 % k(:,:) = ktest;
 % k(nLayers-1,:) = 200;
@@ -48,11 +44,9 @@ dens_Si = 2.329e3; %Silicon
 dens_Bond = 2.65e3; %SiliconDioxide
 dens_Cu = 8.92e3; %Copper
 dens_Gr = 2.267e3; %Graphene
-dens(5,:) = dens_Si;
-dens(4,:) = dens_Gr;
-dens(3,:) = dens_Cu;
-dens(2,:) = dens_Cu;
-dens(1,:) = dens_Cu;
+dens(6:10,:) = dens_Si;
+dens(5,:) = dens_Gr;
+dens(1:4,:) = dens_Cu;
 % dens_test = 2.5e3;
 % dens(:,:) = dens_test;
 
@@ -93,5 +87,10 @@ eval_u = u;
 X = ForwardEuler('F',x_start,eval_u,p,t_start,t_stop,timestep,1,200);
 
 %%
-Xm = vec2mat(X(:,end),nPoints);
+pVisualize = struct; 
+pVisualize.params = p; 
+pVisualize.time = t_stop; 
+pVisualize.nPoints = nPoints;
+pVisualize.figNum = 10;
 
+visualizeNetwork(X(:,end),pVisualize);
