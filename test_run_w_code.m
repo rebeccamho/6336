@@ -91,6 +91,7 @@ pVisualize = struct;
 pVisualize.params = p; 
 pVisualize.time = t_stop; 
 pVisualize.nPoints = nPoints;
+pVisualize.nLayers = nLayers;
 pVisualize.figNum = 10;
 
 visualizeNetwork(X(:,end),pVisualize);

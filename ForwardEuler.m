@@ -19,6 +19,7 @@ pVisualize = struct;
 pVisualize.params = p; 
 pVisualize.time = t_start; 
 pVisualize.nPoints = nPoints;
+pVisualize.nLayers = nLayers;
 pVisualize.figNum = 10;
     
 % if visualize
