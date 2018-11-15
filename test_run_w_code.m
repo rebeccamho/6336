@@ -77,16 +77,15 @@ colorbar;
 %% Run Euler script. 
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature Start
-t_start = 0.1;
+t_start = 0;
 t_stop = 10;
-timestep = 0.001; 
+timestep = 1; 
 
 
 
 eval_u = u;
-X = ForwardEuler('F',x_start,eval_u,p,t_start,t_stop,timestep,1,200);
+% X = ForwardEuler('F',x_start,eval_u,p,t_start,t_stop,timestep,1,200);
 
-%%
 pVisualize = struct; 
 pVisualize.params = p; 
 pVisualize.time = t_stop; 
@@ -94,4 +93,13 @@ pVisualize.nPoints = nPoints;
 pVisualize.nLayers = nLayers;
 pVisualize.figNum = 10;
 
-visualizeNetwork(X(:,end),pVisualize);
+
+t = t_start:timestep:t_stop;
+fhand = @(x,t)fj2DIC(x,t,A_mat,U_vec);
+freq = 2;
+x_trap = trapezoidalNonlinear(x_start,t_start,t_stop,timestep,fhand,freq,pVisualize);
+x_trapFinal = x_trap(:,end);
+
+
+% visualizeNetwork(X(:,end),pVisualize);
+% visualizeNetwork(x_trapFinal,pVisualize);
