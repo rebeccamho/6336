@@ -6,6 +6,12 @@ phi(:,1) = phi_i;
 
 pVisualize.time = t;
 visualizeNetwork(phi(:,1),pVisualize);
+% 	Create GIF filej
+filename = 'temperatureProfile.gif';
+frame = getframe(gcf);
+im = frame2im(frame);
+[imind,cm] = rgb2ind(im,256);
+imwrite(imind,cm,filename,'gif','DelayTime',0.25,'Loopcount',inf);
 
 count = 1;
 
@@ -22,6 +28,13 @@ for i = 2:iter+1
     if count == freq
         pVisualize.time = t;
         visualizeNetwork(phi(:,i),pVisualize);
+        
+        % Write to the GIF file
+        frame = getframe(gcf);
+        im = frame2im(frame);
+        [imind,cm] = rgb2ind(im,256);
+        imwrite(imind,cm,filename,'gif','DelayTime',0.25,'WriteMode','append');
+        
         count = 1;
     end
 end

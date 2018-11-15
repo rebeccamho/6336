@@ -16,6 +16,7 @@ colormap(map);
 xlabel('node','fontsize',15);
 ylabel('material layer','fontsize',15);
 title(['t = ' num2str(p.time) ' s'],'fontsize',20);
+set(gca,'ytick',p.startLayers,'yticklabels',p.materialLayers);
 colorbar;
 drawnow;
 
