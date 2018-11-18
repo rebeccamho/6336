@@ -34,7 +34,7 @@ else
         text(ax,1,startLayers(i)+1,materialLayers{i},'fontsize',15);
     end
 
-    xlabel(ax,'nPoints'); ylabel(ax,'nLayers');
+    xlabel(ax,'Points'); ylabel(ax,'Layers');
     set(ax,'FontSize',12);
 
 
