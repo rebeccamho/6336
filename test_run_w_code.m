@@ -9,10 +9,10 @@ Air = 'Air';
 nLayers = 40;
 nPoints = 40;
 
-materialLayers = [{Cu} {Gr} {Si}]; % list materials from top to bottom
+materialLayers = [{Cu} {Si} {Gr} {Si}]; % list materials from top to bottom
 
 thickness = struct; 
-thickness.(Si) = 0.025; 
+thickness.(Si) = 0.0125; 
 % thickness.(Bond) = 0.05;
 thickness.(Cu) = 0.02;
 thickness.(Gr) = 0.005;
@@ -70,16 +70,27 @@ pVals.(Air) = k.(Air)/(dens.(Air)*hc.(Air));
 
 %% Construct p matrix 
 p = zeros(nLayers,nPoints);
+plotLayers = zeros(nLayers,nPoints);
 startLayers = zeros(nUniqueLayers,1); 
 startIndex = 1;
+
+plotColor = struct;
+plotColor.(Si) = 1;
+plotColor.(Bond) = 2; 
+plotColor.(Cu) = 3;
+plotColor.(Gr) = 4;
+plotColor.(Air) = 5;
 
 for i = 1:nUniqueLayers
     m = materialLayers{i};
     startLayers(i) =  startIndex; 
     endIndex = startIndex + thickness.(m)/minLayerThickness - 1;
     p(startIndex:endIndex,:) = pVals.(m); 
+    plotLayers(startIndex:endIndex,:) = plotColor.(m);
     startIndex = endIndex + 1; 
 end 
+
+plotIC(plotLayers,startLayers,materialLayers,3);
 
 %% Construct u vector. 
 Power_diss = 2e5; %Units [W/m^3], Power dissipated per transistor
@@ -113,7 +124,7 @@ X_steady = vec2mat(x_steady,nPoints);
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature Start
 t_start = 0;
-t_stop = 10;
+t_stop = 1;
 timestep = 0.1; 
 
 
@@ -133,7 +144,7 @@ pVisualize.startLayers = startLayers;
 
 t = t_start:timestep:t_stop;
 fhand = @(x,t)fj2DIC(x,t,A_mat,U_vec);
-freq = 5;
+freq = 2;
 x_trap = trapezoidalNonlinear(x_start,t_start,t_stop,timestep,fhand,freq,pVisualize);
 x_trapFinal = x_trap(:,end);
 
