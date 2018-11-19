@@ -10,8 +10,11 @@ nPoints=size(p,2);
 
 % ChipW = 0.1; % chip width is 1 cm.
 % ChipH = 0.05; % chip height is 1 mm.
+<<<<<<< HEAD
 %ChipW = 1;
 
+=======
+>>>>>>> irene
 chipW = otherParams.chipW;
 chipH = otherParams.chipH;
 
