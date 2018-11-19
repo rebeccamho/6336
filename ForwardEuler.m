@@ -1,4 +1,4 @@
-function X = ForwardEuler(eval_f,x_start,eval_u,p,t_start,t_stop,timestep,visualize,freq)
+function X = ForwardEuler(eval_f,x_start,eval_u,p,t_start,t_stop,timestep,visualize,freq,pVisualize,otherParams)
 % uses Forward Euler to simulate states model dx/dt=f(x,u,p)
 % from state x_start at time t_start
 % until time t_stop, with time intervals timestep
@@ -44,7 +44,7 @@ for n=1:ceil((t_stop-t_start)/timestep)
    dt = min(timestep, (t_stop-t(n)));
    t(n+1)= t(n) + dt;
    u = eval_u;
-   f = feval(eval_f, X(:,n), u, p); 
+   f = feval(eval_f, X(:,n), u, p, otherParams); 
    X(:,n+1)= X(:,n) +  dt * f;
 %    if visualize
 %       visualizeResults(t,X,n+1,'.b');
