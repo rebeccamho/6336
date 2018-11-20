@@ -38,6 +38,10 @@ gcdThickness = double(gcd(materialThickness));
 
 assert(mod(gcdThickness,minLayerThickness) == 0 , 'ERROR: nLayers is not sufficient to discretize IC');
 
+%% Calculate delta x and delta y 
+deltx = chipW/(nPoints-1);
+delty = chipH/(nLayers-1);
+
 %% Material Parameters
 % Specific heat capacity, units J/(kg*k)
 hc = struct; 
@@ -102,9 +106,11 @@ Source_air = Tstart*(k.(Air)/(dens.(Air)*hc.(Air))); %Units, [W/m^3], heat sourc
 %Source_SiO2 = To*(kBond/(dens_Bond*hc_Bond)); %Units, [W/m^3], heat source for SiO2 BC. 
 Source_SiO2 = 0;
 
-u = [Source_Trans, Source_air, Source_air, Source_SiO2];
-%First entry is for the heat source in first layer. 
-%Second entry is the heat source for the boundary conditions. 
+u = [Source_Trans, Source_air/(deltx^2), Source_air/(delty^2), ... 
+    Source_SiO2/(delty^2)];
+% divide source_trans to what power of delta y? need t work out units,
+% previous reference lecture 3 slide 27
+
 
 %% Use function F
 %p = p/100;
