@@ -1,11 +1,11 @@
 % F.m
-% Creates A (nodal) and B (input) matrices and calculates the rate of
-% change over time.
+% Creates A (nodal), B (input), and C (output) matrices and calculates the 
+% rate of change over time.
 % Inputs: x (unknown node values), u (source vector), p (parameter matrix),
 % otherParams (contains parameters related to IC structure). 
 % Outputs: dx_dt (rate of change over time), A_mat (A matrix), B (B vector,
 % represents inputs to system).
-function [dx_dt,A_mat,B] = F(x,u,p,otherParams)
+function [dx_dt,A_mat,B,C] = F(x,u,p,otherParams)
 chipW = otherParams.chipW;
 chipH = otherParams.chipH;
 nLayers= size(p,1);
@@ -98,6 +98,8 @@ B(1:nPoints,3) = B(1:nPoints,3) +1;
 %Bottom Edge , also first layer, leakage to SiO2. 
 B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,4) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,4)+1; 
 
+%% Construct C matrix
+C = eye(nLayers*nPoints);
 
 %% Plot Matrix A_2D
 A_mat = A2d;
