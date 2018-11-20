@@ -4,20 +4,15 @@ nPoints = otherParams.nPoints;
 materialLayers = otherParams.materialLayers;
 startLayers = otherParams.startLayers;
 
-[dx_dt,A_mat,U_vec] = F(x_start,u,p,otherParams);
+% construct A matrix (A_mat) and B*u (U_vec)
+[dx_dt,A_mat,U_vec] = F(x_start,u,p,otherParams); 
 
-x_steady=-U_vec\A_mat;
-X_steady = vec2mat(x_steady,nPoints);
-% figure(100)
-% imagesc(X_steady);
-% colorbar;
-%% Run Euler script. 
+%% Run trapezoidal script. 
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature Start
 t_start = 0;
 % t_stop = 0.5;
 % timestep = 0.1; 
-
 
 
 eval_u = u;

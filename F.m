@@ -4,23 +4,18 @@ function [dx_dt,A_mat,U_vec] = F(x,u,p,otherParams)
 % p contains all parameters of system (thermal conductivity)
 % nLayers = p.layers;
 % nPoints = p.points;
-kAmb = u(2)/298; % Units [W/m*k]
+chipW = otherParams.chipW;
+chipH = otherParams.chipH;
 nLayers= size(p,1);
 nPoints=size(p,2);
 
-% ChipW = 0.1; % chip width is 1 cm.
-% ChipH = 0.05; % chip height is 1 mm.
-
-chipW = otherParams.chipW;
-chipH = otherParams.chipH;
-
 deltx = chipW/(nPoints-1);
 delty = chipH/(nLayers-1);
-% x = p\u;
+
+kAmb = u(2)*(deltx^2)/298; % Units [W/m*k]
 
 k = p;
 
-%k = 1./k; 
 %% Construct A_2D Matrix. 
 kr = reshape(k',nLayers*nPoints,1);
 
@@ -75,13 +70,12 @@ B2d(:,5) = B2d(:,5)/(delty^2);
 % construct 2d sparse matrix
 A2d = spdiags(B2d,d2d,A2d);
 
-%A2d = -1*A2d/(delt^2); 
 A2d = -1*A2d;
 %% Construct B Matrix.
 % B(:,1) = Transistors heating up
 % B(:,2) = X-dir air leakage
 % B(:,3) = Y-dir air leakage
-% B(:,4) = SiO2 SiO2 leakage
+% B(:,4) = SiO2 leakage
 B = zeros(nPoints*nLayers,size(u,2)) ;
 
 % TRANSISTOR HEAT SOURCE
@@ -102,33 +96,9 @@ B(1:nPoints,3) = B(1:nPoints,3) +1;
 %Bottom Edge , also first layer, leakage to SiO2. 
 B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,4) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,4)+1; 
 
-%% Adjust sources vector. 
-
-u(1) = u(1)/delty^0; %reference lecture 3, slide 27. **still need to work out units here
-u(2) = u(2)/(deltx^2); % was *, changed to /
-u(3) = u(3)/(delty^2);
-u(4) = u(4)/(delty^2);
-% u(2) = u(2)/delt^2; %Based on hand calc. Errors may be made here. 
-% u(3) = u(3)/delt^2; 
-
-% u(1) = 0; 
-% u(2) = 0;
-% u(3) = 0; 
-
- 
-
 
 %% Plot Matrix A_2D
-% figure; 
-% subplot(121)
-% spy(A2d)
-% figTitle = ['sparsity pattern for ' int2str(nLayers) ' layer IC with ' int2str(nPoints) ' points per layer'];
-% title(figTitle,'fontsize',20)
-% subplot(122)
-% imagesc(A2d)
-% axis square
-
 A_mat = A2d;
 U_vec = B*u';
 
-dx_dt = A2d*x+B*u'; % unsure of *delt^2 
+dx_dt = A2d*x+B*u'; 
