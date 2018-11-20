@@ -1,34 +1,34 @@
-function phi = trapezoidalNonlinear(phi_i,t_i,t_f,dt,f,freq,pVisualize,varargin)
+function x = trapezoidalNonlinear(C,xi,ti,tf,dt,f,freq,pVisualize,varargin)
 
-iter = (t_f-t_i)/dt;
-t = t_i; 
-phi(:,1) = phi_i;
+iter = (tf-ti)/dt;
+t = ti; 
+x(:,1) = xi;
 
 pVisualize.time = t;
 if ~isempty(varargin)
-    visualizeNetwork(phi(:,1),pVisualize,varargin{1});
+    visualizeNetwork(x(:,1),pVisualize,varargin{1});
 else
-    visualizeNetwork(phi(:,1),pVisualize);
+    visualizeNetwork(x(:,1),pVisualize);
 end
 
 count = 1;
 
 for i = 2:iter+1
     t_prev = t; 
-    phi_prev = phi(:,i-1);
-    F = f(phi_prev,t_prev);
-    gamma = phi_prev + dt/2*F;
+    x_prev = x(:,i-1);
+    F = f(x_prev,t_prev);
+    gamma = x_prev + dt/2*F;
     t = t+dt;
-    ftrap = @(phi)trapezoidalSolve(f,t,dt,phi,gamma);
-    phi(:,i) = newtonNd(ftrap,phi_prev);
+    ftrap = @(x)trapezoidalSolve(f,t,dt,x,gamma);
+    x(:,i) = C'*newtonNd(ftrap,x_prev);
     
     count = count + 1;
-    if count == freq
+    if count >= freq
         pVisualize.time = t;
         if ~isempty(varargin)
-            visualizeNetwork(phi(:,i),pVisualize,varargin{1});
+            visualizeNetwork(x(:,i),pVisualize,varargin{1});
         else
-            visualizeNetwork(phi(:,i),pVisualize);
+            visualizeNetwork(x(:,i),pVisualize);
         end
         count = 1;
     end

@@ -1,3 +1,6 @@
+%% Dynamically adjusting delta_t values  
+% This is done using the trapezoidal code 
+
 clear all; close all; clc;
 %% User-defined parameters for IC (ONLY MODIFY THESE VARIABLES)
 Si = 'Si';
@@ -34,6 +37,10 @@ minLayerThickness = chipH / nLayers;
 gcdThickness = double(gcd(materialThickness));
 
 assert(mod(gcdThickness,minLayerThickness) == 0 , 'ERROR: nLayers is not sufficient to discretize IC');
+
+%% Calculate delta x and delta y 
+deltx = chipW/(nPoints-1);
+delty = chipH/(nLayers-1);
 
 %% Material Parameters
 % Specific heat capacity, units J/(kg*k)
@@ -99,9 +106,11 @@ Source_air = Tstart*(k.(Air)/(dens.(Air)*hc.(Air))); %Units, [W/m^3], heat sourc
 %Source_SiO2 = To*(kBond/(dens_Bond*hc_Bond)); %Units, [W/m^3], heat source for SiO2 BC. 
 Source_SiO2 = 0;
 
-u = [Source_Trans, Source_air, Source_air, Source_SiO2];
-%First entry is for the heat source in first layer. 
-%Second entry is the heat source for the boundary conditions. 
+u = [Source_Trans, Source_air/(deltx^2), Source_air/(delty^2), ... 
+    Source_SiO2/(delty^2)];
+% divide source_trans to what power of delta y? need t work out units,
+% previous reference lecture 3 slide 27
+
 
 %% Use function F
 %p = p/100;
@@ -118,19 +127,19 @@ otherParams.materialLayers = materialLayers;
 otherParams.startLayers = startLayers;
 
 
-[dx_dt,A,B,C] = F(x_start,u,p,otherParams); 
+[dx_dt,A_mat,B] = F(x_start,u,p,otherParams);
 
-% x_steady=-U_vec\A_mat;
-% X_steady = vec2mat(x_steady,nPoints);
-% figure(100)
-% imagesc(X_steady);
-% colorbar;
+x_steady=-A_mat\(B*u');
+X_steady = vec2mat(x_steady,nPoints);
+figure(100)
+imagesc(X_steady);
+colorbar;
 %% Run Euler script. 
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature Start
 t_start = 0;
 t_stop = 10;
-timestep = 1; 
+timestep = 1e-3; 
 
 eval_u = u;
 
@@ -145,27 +154,40 @@ pVisualize.startLayers = startLayers;
 
 
 t = t_start:timestep:t_stop;
-fhand = @(x,t)fj2DIC(x,t,A,B*u');
-freq = 2;
+fhand = @(x,t)fj2DIC(x,t,A_mat,B*u');
+freq = 1;
 tic;
-x_trap = trapezoidalNonlinear(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize);
+[x_trap,Tchange,dt_vec] = trapezoidalNonlinear_dynamic(x_start,t_start,t_stop,timestep,fhand,freq,pVisualize);
 t_trap = toc
 x_trapFinal = x_trap(:,end);
 
 timestep = 1e-3; 
 
-% tic;
-% x_fwdEuler = ForwardEuler('F',x_start,eval_u,p,t_start,t_stop,timestep,1,20000,pVisualize,otherParams);
-% t_euler = toc
-% x_fwdEulerFinal = x_fwdEuler(:,end);
-% 
-% pVisualize.figNum = 1;
-% visualizeNetwork(x_fwdEulerFinal,pVisualize);
+tic;
+x_fwdEuler = ForwardEuler('F',x_start,eval_u,p,t_start,t_stop,timestep,1,20000,pVisualize,otherParams);
+t_euler = toc
+x_fwdEulerFinal = x_fwdEuler(:,end);
+
+pVisualize.figNum = 1;
+visualizeNetwork(x_fwdEulerFinal,pVisualize);
 pVisualize.figNum = 2;
 visualizeNetwork(x_trapFinal,pVisualize);
-% 
-% load('refSoln.mat');
-% refSoln = x_fwdEulerFinal2;
-% 
-% pVisualize.figNum = 3;
-% visualizeNetwork(abs(x_trapFinal-refSoln),pVisualize);
+
+load('refSoln.mat');
+refSoln = x_fwdEulerFinal2;
+
+pVisualize.figNum = 3;
+visualizeNetwork(abs(x_trapFinal-refSoln),pVisualize);
+
+figure(50) %Plot the dt for every timestep. 
+plot(dt_vec,'bo')
+title('dt vs timestep #')
+ylabel('dt')
+xlabel('timestep #')
+
+figure(51) %Plot the change in T for every timestep. 
+plot(Tchange,'ro')
+title('Tchange vs timestep #')
+ylabel('Tchange')
+xlabel('timestep #')
+
