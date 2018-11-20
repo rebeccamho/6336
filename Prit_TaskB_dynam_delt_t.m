@@ -121,9 +121,9 @@ otherParams.materialLayers = materialLayers;
 otherParams.startLayers = startLayers;
 
 
-[dx_dt,A_mat,U_vec] = F(x_start,u,p,otherParams);
+[dx_dt,A_mat,B] = F(x_start,u,p,otherParams);
 
-x_steady=-A_mat\U_vec;
+x_steady=-A_mat\(B*u');
 X_steady = vec2mat(x_steady,nPoints);
 figure(100)
 imagesc(X_steady);
@@ -148,7 +148,7 @@ pVisualize.startLayers = startLayers;
 
 
 t = t_start:timestep:t_stop;
-fhand = @(x,t)fj2DIC(x,t,A_mat,U_vec);
+fhand = @(x,t)fj2DIC(x,t,A_mat,B*u');
 freq = 1;
 tic;
 [x_trap,Tchange,dt_vec] = trapezoidalNonlinear_dynamic(x_start,t_start,t_stop,timestep,fhand,freq,pVisualize);
