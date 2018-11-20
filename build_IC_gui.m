@@ -22,7 +22,7 @@ function varargout = build_IC_gui(varargin)
 
 % Edit the above text to modify the response to help build_IC_gui
 
-% Last Modified by GUIDE v2.5 18-Nov-2018 17:33:47
+% Last Modified by GUIDE v2.5 20-Nov-2018 11:02:26
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -141,9 +141,11 @@ function showTempButton_Callback(hObject, eventdata, handles)
 nLayers = str2double(get(handles.nLayersBox,'String'));
 nPoints = str2double(get(handles.nPointsBox,'String'));
 simTime = str2double(get(handles.simTimeBox,'String'));
+redOrder = get(handles.modBox,'Value');
+disp(redOrder);
 dt = str2double(get(handles.dtBox,'String'));
 [x_start,u,p,otherParams] = build_network_gui_code(handles,nLayers,nPoints);
-run_w_gui_code(handles,x_start,u,p,otherParams,simTime,dt);
+run_w_gui_code(handles,x_start,u,p,otherParams,simTime,dt,redOrder);
 
 
 
@@ -190,3 +192,12 @@ function dtBox_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in modBox.
+function modBox_Callback(hObject, eventdata, handles)
+% hObject    handle to modBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of modBox

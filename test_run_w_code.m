@@ -118,10 +118,10 @@ otherParams.materialLayers = materialLayers;
 otherParams.startLayers = startLayers;
 
 
-[dx_dt,A_mat,U_vec] = F(x_start,u,p,otherParams);
+[dx_dt,A,B,C] = F(x_start,u,p,otherParams); 
 
-x_steady=-U_vec\A_mat;
-X_steady = vec2mat(x_steady,nPoints);
+% x_steady=-U_vec\A_mat;
+% X_steady = vec2mat(x_steady,nPoints);
 % figure(100)
 % imagesc(X_steady);
 % colorbar;
@@ -145,27 +145,27 @@ pVisualize.startLayers = startLayers;
 
 
 t = t_start:timestep:t_stop;
-fhand = @(x,t)fj2DIC(x,t,A_mat,U_vec);
-freq = 1;
+fhand = @(x,t)fj2DIC(x,t,A,B*u');
+freq = 2;
 tic;
-x_trap = trapezoidalNonlinear(x_start,t_start,t_stop,timestep,fhand,freq,pVisualize);
+x_trap = trapezoidalNonlinear(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize);
 t_trap = toc
 x_trapFinal = x_trap(:,end);
 
 timestep = 1e-3; 
 
-tic;
-x_fwdEuler = ForwardEuler('F',x_start,eval_u,p,t_start,t_stop,timestep,1,20000,pVisualize,otherParams);
-t_euler = toc
-x_fwdEulerFinal = x_fwdEuler(:,end);
-
-pVisualize.figNum = 1;
-visualizeNetwork(x_fwdEulerFinal,pVisualize);
+% tic;
+% x_fwdEuler = ForwardEuler('F',x_start,eval_u,p,t_start,t_stop,timestep,1,20000,pVisualize,otherParams);
+% t_euler = toc
+% x_fwdEulerFinal = x_fwdEuler(:,end);
+% 
+% pVisualize.figNum = 1;
+% visualizeNetwork(x_fwdEulerFinal,pVisualize);
 pVisualize.figNum = 2;
 visualizeNetwork(x_trapFinal,pVisualize);
-
-load('refSoln.mat');
-refSoln = x_fwdEulerFinal2;
-
-pVisualize.figNum = 3;
-visualizeNetwork(abs(x_trapFinal-refSoln),pVisualize);
+% 
+% load('refSoln.mat');
+% refSoln = x_fwdEulerFinal2;
+% 
+% pVisualize.figNum = 3;
+% visualizeNetwork(abs(x_trapFinal-refSoln),pVisualize);

@@ -23,7 +23,7 @@ for i = 2:iter+1
     x(:,i) = C'*newtonNd(ftrap,x_prev);
     
     count = count + 1;
-    if count == freq
+    if count >= freq
         pVisualize.time = t;
         if ~isempty(varargin)
             visualizeNetwork(x(:,i),pVisualize,varargin{1});

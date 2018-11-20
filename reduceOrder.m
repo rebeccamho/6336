@@ -19,7 +19,6 @@ val = diag(D);
 % [effect_sort,index] = sort(effect,'descend');
 [val_sort,index] = sort(abs(val),'descend');
 
-
 Vq = V(:,index(1:order));
 At = -Vq'*A*Vq;
 Bt = -Vq'*B;

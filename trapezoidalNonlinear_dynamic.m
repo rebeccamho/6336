@@ -1,4 +1,4 @@
-function [phi,Tchange,dt_vec] = trapezoidalNonlinear_dynamic(phi_i,t_i,t_f,dt,f,freq,pVisualize,varargin)
+function [phi,Tchange,dt_vec] = trapezoidalNonlinear_dynamic(C,phi_i,t_i,t_f,dt,f,freq,pVisualize,varargin)
 % This function implements the trapezoidal method, but with varying dt
 % depending how fast the temperatures of the system are changing. 
 
@@ -48,7 +48,7 @@ while t<t_f
     gamma = phi_prev + dt/2*F;
     t = t+dt;
     ftrap = @(phi)trapezoidalSolve(f,t,dt,phi,gamma);
-    phi(:,i) = newtonNd(ftrap,phi_prev);
+    phi(:,i) = C'*newtonNd(ftrap,phi_prev);
     
     %Calculate Tchange to determine new dt. 
     if i > 1
