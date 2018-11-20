@@ -5,7 +5,7 @@ materialLayers = otherParams.materialLayers;
 startLayers = otherParams.startLayers;
 
 % construct A matrix (A_mat) and B*u (U_vec)
-[dx_dt,A_mat,U_vec] = F(x_start,u,p,otherParams); 
+[dx_dt,A,B] = F(x_start,u,p,otherParams); 
 
 %% Run trapezoidal script. 
 x_start = zeros(nLayers*nPoints,1);
@@ -29,7 +29,7 @@ pVisualize.startLayers = startLayers;
 
 
 t = t_start:timestep:t_stop;
-fhand = @(x,t)fj2DIC(x,t,A_mat,U_vec);
+fhand = @(x,t)fj2DIC(x,t,A,B*u');
 freq = 2;
 x_trap = trapezoidalNonlinear(x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
 x_trapFinal = x_trap(:,end);

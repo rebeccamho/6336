@@ -1,9 +1,11 @@
-function [dx_dt,A_mat,U_vec] = F(x,u,p,otherParams)
-%% x is a vector of our unknowns (temperature)
-% u is a vector containing all known sources/excitations (heat flow)
-% p contains all parameters of system (thermal conductivity)
-% nLayers = p.layers;
-% nPoints = p.points;
+% F.m
+% Creates A (nodal) and B (input) matrices and calculates the rate of
+% change over time.
+% Inputs: x (unknown node values), u (source vector), p (parameter matrix),
+% otherParams (contains parameters related to IC structure). 
+% Outputs: dx_dt (rate of change over time), A_mat (A matrix), B (B vector,
+% represents inputs to system).
+function [dx_dt,A_mat,B] = F(x,u,p,otherParams)
 chipW = otherParams.chipW;
 chipH = otherParams.chipH;
 nLayers= size(p,1);
