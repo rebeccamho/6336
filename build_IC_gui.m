@@ -142,7 +142,6 @@ nLayers = str2double(get(handles.nLayersBox,'String'));
 nPoints = str2double(get(handles.nPointsBox,'String'));
 simTime = str2double(get(handles.simTimeBox,'String'));
 redOrder = get(handles.modBox,'Value');
-disp(redOrder);
 dt = str2double(get(handles.dtBox,'String'));
 [x_start,u,p,otherParams] = build_network_gui_code(handles,nLayers,nPoints);
 run_w_gui_code(handles,x_start,u,p,otherParams,simTime,dt,redOrder);
