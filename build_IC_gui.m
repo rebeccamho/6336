@@ -22,7 +22,7 @@ function varargout = build_IC_gui(varargin)
 
 % Edit the above text to modify the response to help build_IC_gui
 
-% Last Modified by GUIDE v2.5 20-Nov-2018 11:02:26
+% Last Modified by GUIDE v2.5 24-Nov-2018 13:53:28
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -138,8 +138,13 @@ function showTempButton_Callback(hObject, eventdata, handles)
 % hObject    handle to showTempButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-nLayers = str2double(get(handles.nLayersBox,'String'));
-nPoints = str2double(get(handles.nPointsBox,'String'));
+[initialRun,nLayers,nPoints] = getGlobalVars();
+
+if initialRun
+    nLayers = str2double(get(handles.nLayersBox,'String'));
+    nPoints = str2double(get(handles.nPointsBox,'String'));
+    setGlobalVars(0,nLayers,nPoints);
+end
 simTime = str2double(get(handles.simTimeBox,'String'));
 redOrder = get(handles.modBox,'Value');
 dt = str2double(get(handles.dtBox,'String'));
@@ -200,3 +205,12 @@ function modBox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of modBox
+
+
+% --- Executes on button press in transistorBox.
+function transistorBox_Callback(hObject, eventdata, handles)
+% hObject    handle to transistorBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of transistorBox

@@ -1,9 +1,10 @@
 function runSimulation(handles,x_start,u,p,otherParams,t_stop,timestep,reduce)
 
 % Model order reduction parameters
-% reduce = 0; % turn to 0 if don't want model order reduction
 k = 70; % # of eigenvalues to calculate
 order = 40;
+% Plotting parameters
+freq = 2;
 
 
 nLayers = otherParams.nLayers;
@@ -37,10 +38,7 @@ t_start = 0;
  
 % X = ForwardEuler('F',x_start,eval_u,p,t_start,t_stop,timestep,1,200);
 
-
-t = t_start:timestep:t_stop;
 fhand = @(x,t)fj2DIC(x,t,A,B*u');
-freq = 2;
 % x_trap = trapezoidalNonlinear(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
 x_trap = trapezoidalNonlinear_dynamic(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
 x_trapFinal = x_trap(:,end);

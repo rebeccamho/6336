@@ -105,8 +105,8 @@ plotIC(plotLayers,startLayers,materialLayers,3,handles);
 Power_diss = 2e5; %Units [W/m^3], Power dissipated per transistor
 Source_Trans = Power_diss/(dens.(Si)*hc.(Si));
 Source_air = Tstart*(k.(Air)/(dens.(Air)*hc.(Air))); %Units, [W/m^3], heat source for air BC. 
-%Source_SiO2 = To*(kBond/(dens_Bond*hc_Bond)); %Units, [W/m^3], heat source for SiO2 BC. 
-Source_SiO2 = 0;
+Source_SiO2 = Tstart*pVals.Bond; %Units, [W/m^3], heat source for SiO2 BC. 
+%Source_SiO2 = 0;
 
 u = [Source_Trans, Source_air/(deltx^2), Source_air/(delty^2), ... 
     Source_SiO2/(delty^2)];
