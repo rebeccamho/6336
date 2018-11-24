@@ -1,4 +1,4 @@
-function [x_start,u,p,otherParams] = build_network_gui_code(handles,nLayers,nPoints)
+function [x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints)
 
 %% User-defined parameters for IC (ONLY MODIFY THESE VARIABLES)
 Si = 'Si';

@@ -1,15 +1,15 @@
 function varargout = build_IC_gui(varargin)
-% BUILD_IC_GUI MATLAB code for build_IC_gui.fig
-%      BUILD_IC_GUI, by itself, creates a new BUILD_IC_GUI or raises the existing
+% build_IC_gui MATLAB code for build_IC_gui.fig
+%      build_IC_gui, by itself, creates a new build_IC_gui or raises the existing
 %      singleton*.
 %
-%      H = BUILD_IC_GUI returns the handle to a new BUILD_IC_GUI or the handle to
+%      H = build_IC_gui returns the handle to a new build_IC_gui or the handle to
 %      the existing singleton*.
 %
-%      BUILD_IC_GUI('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in BUILD_IC_GUI.M with the given input arguments.
+%      build_IC_gui('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in build_IC_gui.M with the given input arguments.
 %
-%      BUILD_IC_GUI('Property','Value',...) creates a new BUILD_IC_GUI or raises the
+%      build_IC_gui('Property','Value',...) creates a new build_IC_gui or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
 %      applied to the GUI before build_IC_gui_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
@@ -130,7 +130,7 @@ function showICButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 nLayers = str2double(get(handles.nLayersBox,'String'));
 nPoints = str2double(get(handles.nPointsBox,'String'));
-[x_start,u,p,otherParams] = build_network_gui_code(handles,nLayers,nPoints);
+[x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints);
 
 
 % --- Executes on button press in showTempButton.
@@ -143,8 +143,8 @@ nPoints = str2double(get(handles.nPointsBox,'String'));
 simTime = str2double(get(handles.simTimeBox,'String'));
 redOrder = get(handles.modBox,'Value');
 dt = str2double(get(handles.dtBox,'String'));
-[x_start,u,p,otherParams] = build_network_gui_code(handles,nLayers,nPoints);
-run_w_gui_code(handles,x_start,u,p,otherParams,simTime,dt,redOrder);
+[x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints);
+runSimulation(handles,x_start,u,p,otherParams,simTime,dt,redOrder);
 
 
 

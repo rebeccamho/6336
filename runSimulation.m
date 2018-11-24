@@ -1,4 +1,4 @@
-function run_w_gui_code(handles,x_start,u,p,otherParams,t_stop,timestep,reduce)
+function runSimulation(handles,x_start,u,p,otherParams,t_stop,timestep,reduce)
 
 % Model order reduction parameters
 % reduce = 0; % turn to 0 if don't want model order reduction
