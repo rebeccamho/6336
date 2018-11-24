@@ -128,9 +128,9 @@ function showICButton_Callback(hObject, eventdata, handles)
 % hObject    handle to showICButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-nLayers = str2double(get(handles.nLayersBox,'String'));
-nPoints = str2double(get(handles.nPointsBox,'String'));
-[x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,0);
+% nLayers = str2double(get(handles.nLayersBox,'String'));
+% nPoints = str2double(get(handles.nPointsBox,'String'));
+% [x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,0);
 
 
 % --- Executes on button press in showTempButton.
@@ -143,16 +143,17 @@ function showTempButton_Callback(hObject, eventdata, handles)
 simTime = str2double(get(handles.simTimeBox,'String'));
 redOrder = get(handles.modBox,'Value');
 dt = str2double(get(handles.dtBox,'String'));
+[nMatLayers,materialLayers] = getIClayers();
 
 if initialRun
     nLayers = str2double(get(handles.nLayersBox,'String'));
     nPoints = str2double(get(handles.nPointsBox,'String'));
     setGlobalVars(0,nLayers,nPoints);
-    [x_start] = createNetwork(handles,nLayers,nPoints,redOrder);
+    [x_start] = createNetwork(handles,nLayers,nPoints,redOrder,materialLayers);
     setInitialParams(x_start,0); % set initial x and t
 end
 
-[~,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,redOrder);
+[~,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,redOrder,materialLayers);
 runSimulation(handles,u,p,otherParams,simTime,dt,redOrder);
 
 
@@ -252,7 +253,10 @@ function addMaterial_Callback(hObject, eventdata, handles)
 nMatLayers = nMatLayers + 1;
 allMaterials = get(handles.selectMaterial,'String');
 materialIndex = get(handles.selectMaterial,'Value');
-materialLayers(nMatLayers) = allMaterials(materialIndex);
+if nMatLayers ~= 1
+    materialLayers(2:nMatLayers) = materialLayers;
+end 
+materialLayers{1} = cell2mat(allMaterials(materialIndex));
 setIClayers(nMatLayers,materialLayers);
 nLayers = str2double(get(handles.nLayersBox,'String'));
 nPoints = str2double(get(handles.nPointsBox,'String'));
