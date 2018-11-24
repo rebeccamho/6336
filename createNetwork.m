@@ -1,16 +1,16 @@
-function [x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints)
+function [x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,materialLayers)
 
 %% User-defined parameters for IC (ONLY MODIFY THESE VARIABLES)
-Si = 'Si';
+Si = 'Silicon';
 Bond = 'Bond';
-Cu = 'Cu';
-Gr = 'Gr';
+Cu = 'Copper';
+Gr = 'Graphene';
 Air = 'Air';
 
 % nLayers = 40;
 % nPoints = 40;
 
-materialLayers = [{Cu} {Gr} {Si}]; % list materials from top to bottom
+% materialLayers = [{Cu} {Gr} {Si}]; % list materials from top to bottom
 
 thickness = struct; 
 thickness.(Si) = 0.025; 

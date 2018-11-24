@@ -22,7 +22,7 @@ function varargout = build_IC_gui(varargin)
 
 % Edit the above text to modify the response to help build_IC_gui
 
-% Last Modified by GUIDE v2.5 24-Nov-2018 13:53:28
+% Last Modified by GUIDE v2.5 24-Nov-2018 14:34:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -214,3 +214,42 @@ function transistorBox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of transistorBox
+
+
+% --- Executes on selection change in selectMaterial.
+function selectMaterial_Callback(hObject, eventdata, handles)
+% hObject    handle to selectMaterial (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns selectMaterial contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from selectMaterial
+
+
+% --- Executes during object creation, after setting all properties.
+function selectMaterial_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to selectMaterial (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in addMaterial.
+function addMaterial_Callback(hObject, eventdata, handles)
+% hObject    handle to addMaterial (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[nMatLayers,materialLayers] = getIClayers();
+nMatLayers = nMatLayers + 1;
+allMaterials = get(handles.selectMaterial,'String');
+materialIndex = get(handles.selectMaterial,'Value');
+materialLayers(nMatLayers) = allMaterials(materialIndex);
+setIClayers(nMatLayers,materialLayers);
+nLayers = str2double(get(handles.nLayersBox,'String'));
+nPoints = str2double(get(handles.nPointsBox,'String'));
+[x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,materialLayers);
