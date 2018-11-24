@@ -130,7 +130,7 @@ function showICButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 nLayers = str2double(get(handles.nLayersBox,'String'));
 nPoints = str2double(get(handles.nPointsBox,'String'));
-[x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints);
+[x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,0);
 
 
 % --- Executes on button press in showTempButton.
@@ -140,16 +140,20 @@ function showTempButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 [initialRun,nLayers,nPoints] = getGlobalVars();
 
+simTime = str2double(get(handles.simTimeBox,'String'));
+redOrder = get(handles.modBox,'Value');
+dt = str2double(get(handles.dtBox,'String'));
+
 if initialRun
     nLayers = str2double(get(handles.nLayersBox,'String'));
     nPoints = str2double(get(handles.nPointsBox,'String'));
     setGlobalVars(0,nLayers,nPoints);
+    [x_start] = createNetwork(handles,nLayers,nPoints,redOrder);
+    setInitialParams(x_start,0); % set initial x and t
 end
-simTime = str2double(get(handles.simTimeBox,'String'));
-redOrder = get(handles.modBox,'Value');
-dt = str2double(get(handles.dtBox,'String'));
-[x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints);
-runSimulation(handles,x_start,u,p,otherParams,simTime,dt,redOrder);
+
+[~,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,redOrder);
+runSimulation(handles,u,p,otherParams,simTime,dt,redOrder);
 
 
 

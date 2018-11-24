@@ -1,4 +1,4 @@
-function [x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints)
+function [x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,reduce)
 
 %% User-defined parameters for IC (ONLY MODIFY THESE VARIABLES)
 Si = 'Si';
@@ -114,7 +114,12 @@ u = [Source_Trans, Source_air/(deltx^2), Source_air/(delty^2), ...
 % previous reference lecture 3 slide 27
 
 %% Define initial conditions and create struct of IC properties
-x_start = zeros(nLayers*nPoints,1);
+
+if reduce
+    x_start = zeros(order,1); % with model order reduction
+else
+    x_start = zeros(nLayers*nPoints,1); % no model order reduction
+end
 x_start(:) = Tstart; %Room temperature to start
 
 otherParams = struct;
