@@ -1,4 +1,4 @@
-function [phi,Tchange,dt_vec] = trapezoidalNonlinear_dynamic(C,phi_i,t_i,t_f,dt,f,freq,pVisualize,varargin)
+function [phi,t,Tchange,dt_vec] = trapezoidalNonlinear_dynamic(C,phi_i,t_i,t_f,dt,f,freq,pVisualize,varargin)
 % This function implements the trapezoidal method, but with varying dt
 % depending how fast the temperatures of the system are changing. 
 

@@ -1,8 +1,9 @@
-function [x,y,z] = getGlobalVars()
+function [init,l,p] = getGlobalVars()
 
 global initialRun;
 global nLayers;
 global nPoints;
-x = initialRun;
-y = nLayers;
-z = nPoints;
+
+init = initialRun;
+l = nLayers;
+p = nPoints;
