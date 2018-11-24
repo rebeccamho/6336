@@ -1,3 +1,10 @@
+% runSimulation.m
+% Runs temperature simulation of 2D IC over time.
+% Inputs: handles (used for GUI), u (vector of source values), p (matrix of
+% material properties btwn nodes), otherParams (struct of IC parameters),
+% t_stop (time at which simulation should end), timestep, reduce (1 if
+% using model order reduction, 0 otherwise).
+
 function runSimulation(handles,u,p,otherParams,t_stop,timestep,reduce)
 
 % Model order reduction parameters

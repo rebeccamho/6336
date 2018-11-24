@@ -141,14 +141,15 @@ function showTempButton_Callback(hObject, eventdata, handles)
 [initialRun,nLayers,nPoints] = getGlobalVars();
 
 simTime = str2double(get(handles.simTimeBox,'String'));
-redOrder = get(handles.modBox,'Value');
+redOrder = get(handles.modBox,'Value'); % 1 if using model order reduction
+transOn = get(handles.transistorBox,'Value'); % 1 if transistors on
 dt = str2double(get(handles.dtBox,'String'));
 
-if initialRun
+if initialRun  % first time running simulation
     nLayers = str2double(get(handles.nLayersBox,'String'));
     nPoints = str2double(get(handles.nPointsBox,'String'));
     setGlobalVars(0,nLayers,nPoints);
-    [x_start] = createNetwork(handles,nLayers,nPoints,redOrder);
+    [x_start] = createNetwork(handles,nLayers,nPoints,redOrder,0,0);
     setInitialParams(x_start,0); % set initial x and t
 end
 

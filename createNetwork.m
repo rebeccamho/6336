@@ -1,4 +1,14 @@
-function [x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,reduce,materialLayers)
+% createNetwork.m
+% Returns parameters related to IC network.
+% Inputs: handles (used for GUI), nLayers (# layers), nPoints (# points),
+% reduce (0 if reduce model order, 1 otherwise), materialLayers (irene
+% explain), transState (0 if transistors off, 1 otherwise)
+% Outputs: x_start (initial node values), u (vector of source values), p
+% (matrix of material properties btwn nodes), otherParams (struct of
+% parameters related to IC).
+
+function [x_start,u,p,otherParams] = createNetwork(handles,nLayers,...
+    nPoints,reduce,materialLayers,transState)
 
 %% User-defined parameters for IC (ONLY MODIFY THESE VARIABLES)
 Si = 'Silicon';
@@ -102,7 +112,11 @@ plotIC(plotLayers,startLayers,materialLayers,3,handles);
 % 1) transistor heat source, 2) x-direction leakage to air, 3) y-direction
 % leakage to air, 4) heat leakage to SiO2 wafer
 
-Power_diss = 2e5; %Units [W/m^3], Power dissipated per transistor
+if transState
+    Power_diss = 2e5; %Units [W/m^3], Power dissipated per transistor
+else
+    Power_diss = 0;
+end
 Source_Trans = Power_diss/(dens.(Si)*hc.(Si));
 Source_air = Tstart*(k.(Air)/(dens.(Air)*hc.(Air))); %Units, [W/m^3], heat source for air BC. 
 Source_SiO2 = Tstart*pVals.Bond; %Units, [W/m^3], heat source for SiO2 BC. 
