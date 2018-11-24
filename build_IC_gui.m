@@ -22,7 +22,7 @@ function varargout = build_IC_gui(varargin)
 
 % Edit the above text to modify the response to help build_IC_gui
 
-% Last Modified by GUIDE v2.5 24-Nov-2018 14:34:32
+% Last Modified by GUIDE v2.5 24-Nov-2018 16:08:31
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -262,3 +262,11 @@ setIClayers(nMatLayers,materialLayers);
 nLayers = str2double(get(handles.nLayersBox,'String'));
 nPoints = str2double(get(handles.nPointsBox,'String'));
 [u,p,otherParams] = createNetwork(handles,nLayers,nPoints,materialLayers,0);
+
+
+% --- Executes on button press in resetButton.
+function resetButton_Callback(hObject, eventdata, handles)
+% hObject    handle to resetButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+reset();
