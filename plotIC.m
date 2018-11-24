@@ -29,7 +29,8 @@ else
     imagesc(ax,plotLayers);
     map = colorcet('I3');
     colormap(map);
-    
+    caxis([1 3])
+
     for i = 1:nUniqueLayers
         text(ax,1,startLayers(i)+1,materialLayers{i},'fontsize',15);
     end

@@ -23,10 +23,10 @@ Air = 'Air';
 % materialLayers = [{Cu} {Gr} {Si}]; % list materials from top to bottom
 
 thickness = struct; 
-thickness.(Si) = 0.02; % 0.025
+thickness.(Si) = 0.025; % 0.025
 % thickness.(Bond) = 0.05;
 thickness.(Cu) = 0.02;
-thickness.(Gr) = 0.02; % 0.005
+thickness.(Gr) = 0.005; % 0.005
 
 chipW = 0.1;
 
@@ -44,7 +44,7 @@ end
 minLayerThickness = chipH / nLayers;
 gcdThickness = double(gcd(materialThickness));
 
-assert(mod(gcdThickness,minLayerThickness) == 0 , 'ERROR: nLayers is not sufficient to discretize IC');
+% assert(mod(gcdThickness,minLayerThickness) == 0 , 'ERROR: nLayers is not sufficient to discretize IC');
 
 %% Calculate delta x and delta y 
 deltx = chipW/(nPoints-1);
@@ -91,15 +91,18 @@ startIndex = 1;
 
 plotColor = struct;
 plotColor.(Si) = 1;
-plotColor.(Bond) = 2; 
-plotColor.(Cu) = 3;
-plotColor.(Gr) = 4;
+plotColor.(Cu) = 2;
+plotColor.(Gr) = 3;
+plotColor.(Bond) = 4; 
 plotColor.(Air) = 5;
 
 for i = 1:nUniqueLayers
     m = materialLayers{i};
     startLayers(i) =  startIndex; 
-    endIndex = startIndex + thickness.(m)/minLayerThickness - 1;
+    endIndex = startIndex + floor(thickness.(m)/minLayerThickness) - 1;
+    if i == nUniqueLayers 
+        endIndex = nLayers;
+    end
     p(startIndex:endIndex,:) = pVals.(m); 
     plotLayers(startIndex:endIndex,:) = plotColor.(m);
     startIndex = endIndex + 1; 
