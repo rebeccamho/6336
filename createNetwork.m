@@ -23,10 +23,10 @@ Air = 'Air';
 % materialLayers = [{Cu} {Gr} {Si}]; % list materials from top to bottom
 
 thickness = struct; 
-thickness.(Si) = 0.025; 
+thickness.(Si) = 0.02; % 0.025
 % thickness.(Bond) = 0.05;
 thickness.(Cu) = 0.02;
-thickness.(Gr) = 0.005;
+thickness.(Gr) = 0.02; % 0.005
 
 chipW = 0.1;
 
