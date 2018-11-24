@@ -138,7 +138,7 @@ function showTempButton_Callback(hObject, eventdata, handles)
 % hObject    handle to showTempButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[initialRun,nLayers,nPoints] = getGlobalVars();
+[initialRun,nLayers,nPoints,Tstart] = getGlobalVars();
 
 simTime = str2double(get(handles.simTimeBox,'String'));
 redOrder = get(handles.modBox,'Value'); % 1 if using model order reduction
@@ -149,12 +149,12 @@ dt = str2double(get(handles.dtBox,'String'));
 if initialRun  % first time running simulation
     nLayers = str2double(get(handles.nLayersBox,'String'));
     nPoints = str2double(get(handles.nPointsBox,'String'));
-    setGlobalVars(0,nLayers,nPoints); 
-    [x_start] = createNetwork(handles,nLayers,nPoints,redOrder,materialLayers);
+    setGlobalVars(0,nLayers,nPoints,Tstart); 
+    x_start = initializeNodes(nLayers,nPoints,Tstart,redOrder);
     setInitialParams(x_start,0); % set initial x and t
 end
 
-[~,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,redOrder,materialLayers);
+[u,p,otherParams] = createNetwork(handles,nLayers,nPoints,materialLayers,transOn);
 runSimulation(handles,u,p,otherParams,simTime,dt,redOrder);
 
 
@@ -261,4 +261,4 @@ materialLayers{1} = cell2mat(allMaterials(materialIndex));
 setIClayers(nMatLayers,materialLayers);
 nLayers = str2double(get(handles.nLayersBox,'String'));
 nPoints = str2double(get(handles.nPointsBox,'String'));
-[x_start,u,p,otherParams] = createNetwork(handles,nLayers,nPoints,0,materialLayers);
+[u,p,otherParams] = createNetwork(handles,nLayers,nPoints,materialLayers,0);

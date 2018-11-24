@@ -7,8 +7,8 @@
 % (matrix of material properties btwn nodes), otherParams (struct of
 % parameters related to IC).
 
-function [x_start,u,p,otherParams] = createNetwork(handles,nLayers,...
-    nPoints,reduce,materialLayers,transState)
+function [u,p,otherParams] = createNetwork(handles,nLayers,...
+    nPoints,materialLayers,transState)
 
 %% User-defined parameters for IC (ONLY MODIFY THESE VARIABLES)
 Si = 'Silicon';
@@ -30,7 +30,7 @@ thickness.(Gr) = 0.02; % 0.005
 
 chipW = 0.1;
 
-Tstart = 298; %Room temperature 
+[~,~,~,Tstart] = getGlobalVars; %Room temperature 
 
 %% Calculate chip height and make sure the discretization can accomodate for thinnest layer
 nUniqueLayers = length(materialLayers);
@@ -118,7 +118,7 @@ else
     Power_diss = 0;
 end
 Source_Trans = Power_diss/(dens.(Si)*hc.(Si));
-Source_air = Tstart*(k.(Air)/(dens.(Air)*hc.(Air))); %Units, [W/m^3], heat source for air BC. 
+Source_air = Tstart*pVals.Air; %Units, [W/m^3], heat source for air BC. 
 Source_SiO2 = Tstart*pVals.Bond; %Units, [W/m^3], heat source for SiO2 BC. 
 %Source_SiO2 = 0;
 
@@ -129,13 +129,6 @@ u = [Source_Trans, Source_air/(deltx^2), Source_air/(delty^2), ...
 
 %% Define initial conditions and create struct of IC properties
 
-if reduce
-    x_start = zeros(order,1); % with model order reduction
-else
-    x_start = zeros(nLayers*nPoints,1); % no model order reduction
-end
-x_start(:) = Tstart; %Room temperature to start
-
 otherParams = struct;
 otherParams.chipW = chipW;
 otherParams.chipH = chipH; 
@@ -143,3 +136,5 @@ otherParams.nLayers = nLayers;
 otherParams.nPoints = nPoints;
 otherParams.materialLayers = materialLayers;
 otherParams.startLayers = startLayers;
+otherParams.kAmb = pVals.Air;
+otherParams.kBond = pVals.Bond;
