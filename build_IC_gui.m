@@ -22,7 +22,7 @@ function varargout = build_IC_gui(varargin)
 
 % Edit the above text to modify the response to help build_IC_gui
 
-% Last Modified by GUIDE v2.5 24-Nov-2018 16:08:31
+% Last Modified by GUIDE v2.5 25-Nov-2018 15:33:42
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -180,8 +180,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-
 function dtBox_Callback(hObject, eventdata, handles)
 % hObject    handle to dtBox (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -269,4 +267,11 @@ function resetButton_Callback(hObject, eventdata, handles)
 % hObject    handle to resetButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-reset();
+resetGUI();
+
+
+% --- Executes during object creation, after setting all properties.
+function maxTempValue_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to maxTempValue (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called

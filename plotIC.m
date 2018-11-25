@@ -32,7 +32,7 @@ else
     caxis([1 3])
 
     for i = 1:nUniqueLayers
-        text(ax,1,startLayers(i)+1,materialLayers{i},'fontsize',15);
+        text(ax,1,startLayers(i)+1,materialLayers{i},'fontsize',12);
     end
 
     xlabel(ax,'Points'); ylabel(ax,'Layers');

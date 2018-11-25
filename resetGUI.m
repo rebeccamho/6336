@@ -1,4 +1,4 @@
-function reset()
+function resetGUI()
 
 close all force
 main();

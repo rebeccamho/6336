@@ -48,3 +48,7 @@ fhand = @(x,t)fj2DIC(x,t,A,B*u');
 [x_trap,tf] = trapezoidalNonlinear_dynamic(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
 x_trapFinal = x_trap(:,end);
 setInitialParams(x_trapFinal,tf);
+
+% maxTemp = num2str(max(x_trapFinal));
+% set(handles.maxTempValue,'String',maxTemp);
+% drawnow;
