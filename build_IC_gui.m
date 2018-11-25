@@ -180,6 +180,8 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+
+
 function dtBox_Callback(hObject, eventdata, handles)
 % hObject    handle to dtBox (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -268,6 +270,12 @@ function resetButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 resetGUI();
+
+% --- Executes during object creation, after setting all properties.
+function maxTempText_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to maxTempText (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
 
 
 % --- Executes during object creation, after setting all properties.
