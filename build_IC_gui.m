@@ -339,5 +339,5 @@ function setTempButton_Callback(hObject, eventdata, handles)
 ax = handles.tempPlot;
 tempLow = str2double(get(handles.tempLowBox,'String'));
 tempHigh = str2double(get(handles.tempHighBox,'String'));
-% caxis(ax,[tempLow tempHigh]);
 setTempScale(1,tempLow,tempHigh);
+caxis(ax,[tempLow tempHigh]);
