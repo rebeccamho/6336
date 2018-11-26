@@ -30,7 +30,8 @@ thickness.(Gr) = 0.005; % 0.005
 
 chipW = 0.1;
 
-[~,~,~,Tstart] = getGlobalVars; %Room temperature 
+[~,~,~,Tstart] = getGlobalVars; % Room temperature 
+T0 = 273;  % temp of heat sink (K)
 
 %% Calculate chip height and make sure the discretization can accomodate for thinnest layer
 nUniqueLayers = length(materialLayers);
@@ -85,6 +86,7 @@ pVals.(Air) = k.(Air)/(dens.(Air)*hc.(Air));
 
 %% Construct parameters (p) matrix
 p = zeros(nLayers,nPoints);
+graphene_i = zeros(nLayers,1);
 plotLayers = zeros(nLayers,nPoints);
 startLayers = zeros(nUniqueLayers,1); 
 startIndex = 1;
@@ -103,6 +105,9 @@ for i = 1:nUniqueLayers
     if i == nUniqueLayers 
         endIndex = nLayers;
     end
+    if convertCharsToStrings(m) == 'Graphene'
+        graphene_i(startIndex:endIndex) = 1;
+    end
     p(startIndex:endIndex,:) = pVals.(m); 
     plotLayers(startIndex:endIndex,:) = plotColor.(m);
     startIndex = endIndex + 1; 
@@ -113,20 +118,22 @@ plotIC(plotLayers,startLayers,materialLayers,3,handles);
 %% Construct source (u) vector. 
 % SOURCES:
 % 1) transistor heat source, 2) x-direction leakage to air, 3) y-direction
-% leakage to air, 4) heat leakage to SiO2 wafer
+% leakage to air, 4) heat leakage to SiO2 wafer, 5) heat sinks connected to
+% graphene layers
 
 if transState
-    Power_diss = 2e5; %Units [W/m^3], Power dissipated per transistor
+    Power_diss = 2e9; %Units [W/m^3], Power dissipated per transistor
 else
     Power_diss = 0;
 end
 Source_Trans = Power_diss/(dens.(Si)*hc.(Si));
 Source_air = Tstart*pVals.Air; %Units, [W/m^3], heat source for air BC. 
-Source_SiO2 = Tstart*pVals.Bond; %Units, [W/m^3], heat source for SiO2 BC. 
+Source_SiO2 = Tstart*pVals.(Bond); %Units, [W/m^3], heat source for SiO2 BC. 
 %Source_SiO2 = 0;
+Source_sink = T0*pVals.(Gr);
 
 u = [Source_Trans, Source_air/(deltx^2), Source_air/(delty^2), ... 
-    Source_SiO2/(delty^2)];
+    Source_SiO2/(delty^2), Source_sink/(deltx^2)];
 % divide source_trans to what power of delta y? need t work out units,
 % previous reference lecture 3 slide 27
 
@@ -141,3 +148,5 @@ otherParams.materialLayers = materialLayers;
 otherParams.startLayers = startLayers;
 otherParams.kAmb = pVals.Air;
 otherParams.kBond = pVals.Bond;
+otherParams.kGr = pVals.(Gr);
+otherParams.gr_i = graphene_i;

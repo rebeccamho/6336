@@ -16,6 +16,9 @@ delty = chipH/(nLayers-1);
 
 kAmb = otherParams.kAmb; % Units [W/m*k]
 kBond = otherParams.kBond;
+kGr = otherParams.kGr;
+
+gr_i = otherParams.gr_i; % 1 if that layer # is graphene
 
 k = p;
 
@@ -70,6 +73,14 @@ B2d(:,4) = B2d(:,4)/(deltx^2);
 B2d(:,1) = B2d(:,1)/(delty^2);
 B2d(:,5) = B2d(:,5)/(delty^2);
 
+% add connections for graphene heat sinks
+for i = 1:nLayers
+    if gr_i(i)
+        B2d((i-1)*nPoints+1,3) = B2d(i*nPoints,3) + kGr/(deltx^2);
+        B2d((i)*nPoints,3) = B2d((i)*nPoints,3) + kGr/(deltx^2);
+    end
+end        
+
 % construct 2d sparse matrix
 A2d = spdiags(B2d,d2d,A2d);
 
@@ -79,6 +90,8 @@ A2d = -1*A2d;
 % B(:,2) = X-dir air leakage
 % B(:,3) = Y-dir air leakage
 % B(:,4) = SiO2 leakage
+% B(:,5) = heat sinks
+
 B = zeros(nPoints*nLayers,size(u,2)) ;
 
 % TRANSISTOR HEAT SOURCE
@@ -98,6 +111,15 @@ B(1:nPoints,3) = B(1:nPoints,3) +1;
 % SIO2 LEAKAGE
 %Bottom Edge , also first layer, leakage to SiO2. 
 B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,4) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,4)+1; 
+
+% HEAT SINKS
+% only connected to graphene layers
+for i = 1:nLayers
+    if gr_i(i)
+        B((i-1)*nPoints+1,5) = B(i*nPoints,5) + 1;
+        B((i)*nPoints,5) = B((i)*nPoints,5) + 1;
+    end
+end
 
 %% Construct C matrix
 C = eye(nLayers*nPoints);
