@@ -16,7 +16,7 @@ function [xf, x] = newtonNd(fhand,x0)
 % number of Newton steps that are plotted sequentially
 % pauses between sub-steps.
 
-tolf = 1e-10;         % function convergence tolerance
+tolf = 1e-8;         % function convergence tolerance
 tolx = 1e-8;          % step convergence tolerance
 maxIters = 500;       % max # of iterations
 x00 = x0;             % initial guess
@@ -30,7 +30,7 @@ for iter = 1:maxIters
     x(:,iter) = x0 + dx;         % solution x at step k+1
     x0 = x(:,iter);              % set value for next guess
     if nf(iter) < tolf && ndx(iter) < tolx % check for convergence
-%           fprintf('Converged in %d iterations\n',iter);
+%             fprintf('Converged in %d iterations\n',iter);
         break
     end
 end

@@ -95,8 +95,8 @@ plotIC(plotLayers,startLayers,materialLayers,3);
 %% Construct u vector. 
 Power_diss = 2e5; %Units [W/m^3], Power dissipated per transistor
 Source_Trans = Power_diss/(dens.(Si)*hc.(Si));
-Source_air = Tstart*(k.(Air)/(dens.(Air)*hc.(Air))); %Units, [W/m^3], heat source for air BC. 
-%Source_SiO2 = To*(kBond/(dens_Bond*hc_Bond)); %Units, [W/m^3], heat source for SiO2 BC. 
+Source_air = Tstart*pVals.Air; %Units, [W/m^3], heat source for air BC. 
+Source_SiO2 = Tstart*pVals.Bond; %Units, [W/m^3], heat source for SiO2 BC. 
 Source_SiO2 = 0;
 
 u = [Source_Trans, Source_air, Source_air, Source_SiO2];
@@ -114,6 +114,8 @@ otherParams.chipW = chipW;
 otherParams.chipH = chipH; 
 otherParams.nLayers = nLayers;
 otherParams.nPoints = nPoints;
+otherParams.kAmb = pVals.Air;
+otherParams.kBond = pVals.Bond;
 otherParams.materialLayers = materialLayers;
 otherParams.startLayers = startLayers;
 
@@ -129,8 +131,8 @@ otherParams.startLayers = startLayers;
 x_start = zeros(nLayers*nPoints,1);
 x_start(:) = 298; %Room temperature Start
 t_start = 0;
-t_stop = 10;
-timestep = 1; 
+t_stop = 1;
+timestep = .1; 
 
 eval_u = u;
 
@@ -149,7 +151,7 @@ fhand = @(x,t)fj2DIC(x,t,A,B*u');
 freq = 2;
 tic;
 x_trap = trapezoidalNonlinear(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize);
-t_trap = toc
+t_trap = toc;
 x_trapFinal = x_trap(:,end);
 
 timestep = 1e-3; 

@@ -27,15 +27,15 @@ if length(varargin) ~= 2
 
 else
     imagesc(ax,plotLayers);
-    map = colorcet('I3');
+    map = colorcet('L18');
     colormap(map);
-    caxis([1 3])
+    caxis(ax,[1 3])
 
     for i = 1:nUniqueLayers
         text(ax,1,startLayers(i)+1,materialLayers{i},'fontsize',12);
     end
 
-    xlabel(ax,'Points'); ylabel(ax,'Layers');
+    xlabel(ax,'points'); ylabel(ax,'layers');
     set(ax,'FontSize',12);
 
 

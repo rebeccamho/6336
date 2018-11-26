@@ -22,7 +22,7 @@ function varargout = build_IC_gui(varargin)
 
 % Edit the above text to modify the response to help build_IC_gui
 
-% Last Modified by GUIDE v2.5 25-Nov-2018 15:33:42
+% Last Modified by GUIDE v2.5 25-Nov-2018 18:07:46
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -283,3 +283,61 @@ function maxTempValue_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to maxTempValue (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
+
+
+
+function tempLowBox_Callback(hObject, eventdata, handles)
+% hObject    handle to tempLowBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of tempLowBox as text
+%        str2double(get(hObject,'String')) returns contents of tempLowBox as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function tempLowBox_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to tempLowBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function tempHighBox_Callback(hObject, eventdata, handles)
+% hObject    handle to tempHighBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of tempHighBox as text
+%        str2double(get(hObject,'String')) returns contents of tempHighBox as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function tempHighBox_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to tempHighBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in setTempButton.
+function setTempButton_Callback(hObject, eventdata, handles)
+% hObject    handle to setTempButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+ax = handles.tempPlot;
+tempLow = str2double(get(handles.tempLowBox,'String'));
+tempHigh = str2double(get(handles.tempHighBox,'String'));
+% caxis(ax,[tempLow tempHigh]);
+setTempScale(1,tempLow,tempHigh);
