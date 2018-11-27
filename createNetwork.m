@@ -12,10 +12,10 @@ function [u,p,otherParams] = createNetwork(handles,nLayers,...
 
 %% User-defined parameters for IC (ONLY MODIFY THESE VARIABLES)
 Si = 'Silicon';
-Bond = 'Bond';
 Cu = 'Copper';
 Gr = 'Graphene';
 Air = 'Air';
+Ox = 'Oxide'; % SiO2
 
 % nLayers = 40;
 % nPoints = 40;
@@ -24,9 +24,9 @@ Air = 'Air';
 
 thickness = struct; 
 thickness.(Si) = 0.025; % 0.025
-% thickness.(Bond) = 0.05;
 thickness.(Cu) = 0.02;
 thickness.(Gr) = 0.005; % 0.005
+thickness.(Ox) = 0.025;
 
 chipW = 0.1;
 
@@ -55,34 +55,34 @@ delty = chipH/(nLayers-1);
 % Specific heat capacity, units J/(kg*k)
 hc = struct; 
 hc.(Si) = 0.7e3; 
-hc.(Bond) = 0.68e3;
 hc.(Cu) = 0.385e3;
 hc.(Gr) = 0.7e3; % Graphite specific heat used instead of graphene
 hc.(Air) = 1e3;
+hc.(Ox) = 1e3;
 
 % Thermal conductivity , units W/(m*K)
 k = struct;
 k.(Si) = 155; 
-k.(Bond) = 1.38; 
 k.(Cu) = 400; 
-k.(Gr) = 5000; % monolayer graphene
+k.(Gr) = 5000; 
 k.(Air) = 0.02; 
+k.(Ox) = 1.2;
 
 % Density, untis kg/m^3
 dens = struct;
 dens.(Si) = 2.329e3; 
-dens.(Bond) = 2.65e3; 
 dens.(Cu) = 8.92e3; 
-dens.(Gr) = 2.267e3; % monolayer graphene
+dens.(Gr) = 2.267e3;
 dens.(Air) = 1.225; 
+dens.(Ox) = 2.65e3;
 
 % Calculate p values
 pVals = struct; 
 pVals.(Si) = k.(Si)/(dens.(Si)*hc.(Si));
-pVals.(Bond) = k.(Bond)/(dens.(Bond)*hc.(Bond));
 pVals.(Cu) = k.(Cu)/(dens.(Cu)*hc.(Cu));
 pVals.(Gr) = k.(Gr)/(dens.(Gr)*hc.(Gr));
 pVals.(Air) = k.(Air)/(dens.(Air)*hc.(Air));
+pVals.(Ox) = k.(Ox)/(dens.(Ox)*hc.(Ox));
 
 %% Construct parameters (p) matrix
 p = zeros(nLayers,nPoints);
@@ -95,7 +95,7 @@ plotColor = struct;
 plotColor.(Si) = 1;
 plotColor.(Cu) = 2;
 plotColor.(Gr) = 3;
-plotColor.(Bond) = 4; 
+plotColor.(Ox) = 4; 
 plotColor.(Air) = 5;
 
 for i = 1:nUniqueLayers
@@ -128,8 +128,7 @@ else
 end
 Source_Trans = Power_diss/(dens.(Si)*hc.(Si));
 Source_air = Tstart*pVals.Air; %Units, [W/m^3], heat source for air BC. 
-Source_SiO2 = Tstart*pVals.(Bond); %Units, [W/m^3], heat source for SiO2 BC. 
-%Source_SiO2 = 0;
+Source_SiO2 = Tstart*pVals.(Ox); %Units, [W/m^3], heat source for SiO2 BC. 
 Source_sink = T0*pVals.(Gr);
 
 u = [Source_Trans, Source_air/(deltx^2), Source_air/(delty^2), ... 
@@ -147,6 +146,6 @@ otherParams.nPoints = nPoints;
 otherParams.materialLayers = materialLayers;
 otherParams.startLayers = startLayers;
 otherParams.kAmb = pVals.Air;
-otherParams.kBond = pVals.Bond;
+otherParams.kOx = pVals.(Ox);
 otherParams.kGr = pVals.(Gr);
 otherParams.gr_i = graphene_i;

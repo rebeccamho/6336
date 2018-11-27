@@ -15,7 +15,7 @@ deltx = chipW/(nPoints-1);
 delty = chipH/(nLayers-1);
 
 kAmb = otherParams.kAmb; % Units [W/m*k]
-kBond = otherParams.kBond;
+kOx = otherParams.kOx;
 kGr = otherParams.kGr;
 
 gr_i = otherParams.gr_i; % 1 if that layer # is graphene
@@ -46,14 +46,14 @@ end
 % corners 
 B2d(topLeft,3) = B2d(topLeft,3) + (kr(topLeft+1) + kAmb)/(deltx^2) + (kr(topLeft+N) + kAmb)/(delty^2);
 B2d(topRight,3) = B2d(topRight,3) + (kr(topRight-1) + kAmb)/(deltx^2) + (kr(topRight+N) + kAmb)/(delty^2);
-B2d(botLeft,3) = B2d(botLeft,3) + (kr(botLeft+1) + kAmb)/(deltx^2) + (kr(botLeft-N) + kBond)/(delty^2);
-B2d(botRight,3) = B2d(botRight,3) + (kr(botRight-1) + kAmb)/(deltx^2) + (kr(botRight-N) + kBond)/(delty^2);
+B2d(botLeft,3) = B2d(botLeft,3) + (kr(botLeft+1) + kAmb)/(deltx^2) + (kr(botLeft-N) + kOx)/(delty^2);
+B2d(botRight,3) = B2d(botRight,3) + (kr(botRight-1) + kAmb)/(deltx^2) + (kr(botRight-N) + kOx)/(delty^2);
 % edges
 for i = topLeft+1:topRight-1 % top edge
     B2d(i,3) = B2d(i,3) + (kr(i+1) + kr(i-1))/(deltx^2) + (kr(i+N) + kAmb)/(delty^2); 
 end
 for i = botLeft+1:botRight-1 % bottom edge
-    B2d(i,3) = B2d(i,3) + (kr(i+1) + kr(i-1))/(deltx^2) + (kr(i-N) + kBond)/(delty^2);
+    B2d(i,3) = B2d(i,3) + (kr(i+1) + kr(i-1))/(deltx^2) + (kr(i-N) + kOx)/(delty^2);
 end
 for i = topLeft+N:N:botLeft-N % left and right edges
     j = i+N-1; % index for right edge
