@@ -28,7 +28,7 @@ thickness.(Si) = 0.025; % 0.025
 thickness.(Cu) = 0.02;
 thickness.(Gr) = 0.005; % 0.005
 
-chipW = 0.01;
+chipW = 0.1;
 
 [~,~,~,Tstart] = getGlobalVars; % Room temperature 
 T0 = 298;  % temp of heat sink (K)
@@ -122,7 +122,7 @@ plotIC(plotLayers,startLayers,materialLayers,3,handles);
 % graphene layers
 
 if transState
-    Power_diss = 5e8; %Units [W/m^3], Power dissipated per transistor
+    Power_diss = 2e8; %Units [W/m^3], Power dissipated per transistor
 else
     Power_diss = 0;
 end

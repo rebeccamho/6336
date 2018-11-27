@@ -120,7 +120,9 @@ for i = 1:nUniqueLayers
     startIndex = endIndex + 1; 
 end 
 
-% plotIC(plotLayers,startLayers,materialLayers,3);
+plotIC(plotLayers,startLayers,materialLayers,3);
+movegui(gcf,'northwest');
+
 
 % Construct source (u) vector. 
 % SOURCES:
@@ -188,6 +190,8 @@ ylabel('material layer');
 title('Steady State');
 set(gca,'ytick',startLayers,'yticklabel',materialLayers,'fontsize',12)
 colorbar;
+movegui(gcf,'southeast');
+
 
 % Run trapezoidal script. 
 pVisualize = struct; 

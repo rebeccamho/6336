@@ -8,8 +8,8 @@
 function runSimulation(handles,u,p,otherParams,t_stop,timestep,reduce)
 
 % Model order reduction parameters
-nLayersRed = 20;
-nPointsRed = 20;
+nLayersRed = 40;
+nPointsRed = 40;
 k = 40*40; % # of eigenvalues to calculate
 order = nLayersRed*nPointsRed;
 % Plotting parameters
@@ -47,12 +47,12 @@ pVisualize.figNum = 10;
 pVisualize.materialLayers = materialLayers;
 pVisualize.startLayers = startLayers;
 
-sysOriginal = ss(full(A),B*u',C',0);
+% sysOriginal = ss(full(A),B*u',C',0);
 
 
 if reduce  % reduce order of model if reduce = 1
      [A,B,C] = reduceOrder(A,B*u',C,order,k);
-     sysRed = ss(A,B,C',0);
+%      sysRed = ss(A,B,C',0);
 
 %     W = traprule_LTI(x_start, timestep, t_start, t_stop, A, B, u);
 %     [A,B,C] = pod(A, B, C, q, W);
@@ -84,7 +84,7 @@ end
 % [x_trap,tf] = trapezoidalNonlinear(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
 [x_trap,tf] = trapezoidalNonlinear_dynamic(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
 % x_trap = C'*x_trap;
-x_trapFinal = x_trap(:,end);
+x_trapFinal = C.*x_trap(:,end);
 setInitialParams(x_trapFinal,tf);
 
 % maxTemp = num2str(max(x_trapFinal));

@@ -44,6 +44,8 @@ else
     set(gca,'ytick',p.startLayers,'yticklabel',p.materialLayers,'fontsize',12)
     colorbar;
     drawnow;
+    movegui(gcf,'northeast');
+
 end
 
 end

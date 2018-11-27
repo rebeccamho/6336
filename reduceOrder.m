@@ -10,14 +10,14 @@ function [At,Bt,Ct] = reduceOrder(A,B,C,order,k)
 
 val = diag(D);
 
-% Bt = V'*B;
-% Ct = V'*C;
-% effect = zeros(1,length(val));
-% for i = 1:length(val)
-%     effect(i) = abs((Ct(i)*Bt(i))/val(i));
-% end
-% [effect_sort,index] = sort(effect,'descend');
-[val_sort,index] = sort(abs(val),'ascend');
+Bt = V'*B;
+Ct = V'*C;
+effect = zeros(1,length(val));
+for i = 1:length(val)
+    effect(i) = abs((Ct(i)*Bt(i))/val(i));
+end
+[effect_sort,index] = sort(effect,'descend');
+% [val_sort,index] = sort(abs(val),'ascend');
 
 Vq = V(:,index(1:order));
 At = Vq'*A*Vq;

@@ -1,10 +1,11 @@
 clear all; close all; clc;
 
+format long
 % options = optimoptions('fsolve','PlotFcn',@optimplotfirstorderopt,'Algorithm','levenberg-marquardt','Display','iter-detailed','OptimalityTolerance',1e-8,'StepTolerance',1e-6);
 options = optimoptions('fmincon','PlotFcn',@optimplotfirstorderopt,'Algorithm','interior-point','Display','iter-detailed','OptimalityTolerance',1e-12,'StepTolerance',1e-6);
 fun = @optimizeIC;
-tSi = 0.015;  
-tCu = 0.015;
+tSi = 0.02;  
+tCu = 0.02;
 lb = [0.01 ; 0.01];
 ub = [0.03 ; 0.03];
 % pSi = 1e-04;
@@ -240,6 +241,13 @@ end
 [x_trap,tf] = trapezoidalNonlinear_dynamic(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize);
 x_trapFinal = x_trap(:,end);
 % setInitialParams(x_trapFinal,tf);
+
+figure(4);
+x_trapFinalPlot = reshape(x_trapFinal,nPoints,nLayers)';
+imagesc(x_trapFinalPlot);
+map = colorcet('D1');
+colormap(map);
+colorbar; 
 
 % maxTemp = num2str(max(x_trapFinal));
 % set(handles.maxTempValue,'String',maxTemp);
