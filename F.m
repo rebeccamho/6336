@@ -76,8 +76,8 @@ B2d(:,5) = B2d(:,5)/(delty^2);
 % add connections for graphene heat sinks
 for i = 1:nLayers
     if gr_i(i)
-        B2d((i-1)*nPoints+1,3) = B2d(i*nPoints,3) + kGr/(deltx^2);
-        B2d((i)*nPoints,3) = B2d((i)*nPoints,3) + kGr/(deltx^2);
+        B2d((i-1)*nPoints+1,3) = B2d(i*nPoints,3) + (kGr - kAmb)/(deltx^2);
+        B2d((i)*nPoints,3) = B2d((i)*nPoints,3) + (kGr - kAmb)/(deltx^2);
     end
 end        
 
@@ -118,6 +118,9 @@ for i = 1:nLayers
     if gr_i(i)
         B((i-1)*nPoints+1,5) = B(i*nPoints,5) + 1;
         B((i)*nPoints,5) = B((i)*nPoints,5) + 1;
+        % remove x-dir air leakage at these edges
+        B((i-1)*nPoints+1,2) = B(i*nPoints,2) - 1;
+        B((i)*nPoints,2) = B((i)*nPoints,2) - 1;
     end
 end
 
