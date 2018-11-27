@@ -15,7 +15,7 @@ nUniqueLayers = length(materialLayers);
 if length(varargin) ~= 2
     figure(figNum);
     imagesc(plotLayers)
-    map = colorcet('I3');
+    map = colorcet('L18');
     colormap(map);
 
     for i = 1:nUniqueLayers

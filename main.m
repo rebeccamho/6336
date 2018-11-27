@@ -1,5 +1,5 @@
 function main
-
+clear all; close all force; clc;
 Tstart = 298; % room temp
 
 % initialize global variables

@@ -1,4 +1,4 @@
-function x = trapezoidalNonlinear(C,xi,ti,tf,dt,f,freq,pVisualize,varargin)
+function [x,t] = trapezoidalNonlinear(C,xi,ti,tf,dt,f,freq,pVisualize,varargin)
 
 iter = (tf-ti)/dt;
 t = ti; 
@@ -20,7 +20,8 @@ for i = 2:iter+1
     gamma = x_prev + dt/2*F;
     t = t+dt;
     ftrap = @(x)trapezoidalSolve(f,t,dt,x,gamma);
-    x(:,i) = C'*newtonNd(ftrap,x_prev);
+    x(:,i) = C.*newtonNd(ftrap,x_prev);
+    
     
     count = count + 1;
     if count >= freq
