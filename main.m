@@ -13,7 +13,8 @@ setTempScale(0,298,298);
 
 nUniqueLayers = 3;
 % materialLayers = [{'Copper'} {'Graphene'} {'Silicon'}]; % list materials from top to bottom
-materialLayers = [{'Copper'} {'Silicon'}]; % list materials from top to bottom
+% materialLayers = [{'Copper'} {'Silicon'}]; % list materials from top to bottom
+materialLayers = [ {'Copper'}  {'Graphene'}  {'Silicon'}]; % list materials from top to bottom
 
 setIClayers(nUniqueLayers,materialLayers)
 

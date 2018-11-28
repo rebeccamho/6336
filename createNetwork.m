@@ -23,7 +23,7 @@ Air = 'Air';
 % materialLayers = [{Cu} {Gr} {Si}]; % list materials from top to bottom
 
 thickness = struct; 
-thickness.(Si) = 0.025; % 0.025
+thickness.(Si) = 0.005; % 0.025
 % thickness.(Bond) = 0.05;
 thickness.(Cu) = 0.02;
 thickness.(Gr) = 0.005; % 0.005
@@ -78,12 +78,19 @@ dens.(Air) = 1.225;
 
 % Calculate p values
 pVals = struct; 
-pVals.(Si) = k.(Si)/(dens.(Si)*hc.(Si));
-pVals.(Bond) = k.(Bond)/(dens.(Bond)*hc.(Bond));
-pVals.(Cu) = k.(Cu)/(dens.(Cu)*hc.(Cu));
-pVals.(Gr) = k.(Gr)/(dens.(Gr)*hc.(Gr));
+pVals.(Si) = (k.(Si)/(dens.(Si)*hc.(Si)));
+pVals.(Bond) = (k.(Bond)/(dens.(Bond)*hc.(Bond)));
+pVals.(Cu) = (k.(Cu)/(dens.(Cu)*hc.(Cu)));
+pVals.(Gr) = (k.(Gr)/(dens.(Gr)*hc.(Gr)));
 pVals.(Air) = k.(Air)/(dens.(Air)*hc.(Air));
 
+
+% pVals = struct; 
+% pVals.(Si) = 1/(k.(Si));
+% pVals.(Bond) = 1/(k.(Bond));
+% pVals.(Cu) = 1/(k.(Cu));
+% pVals.(Gr) = 1/(k.(Gr));
+% pVals.(Air) = k.(Air);
 %% Construct parameters (p) matrix
 p = zeros(nLayers,nPoints);
 graphene_i = zeros(nLayers,1);
@@ -122,7 +129,7 @@ plotIC(plotLayers,startLayers,materialLayers,3,handles);
 % graphene layers
 
 if transState
-    Power_diss = 2e8; %Units [W/m^3], Power dissipated per transistor
+    Power_diss = 2e9; %Units [W/m^3], Power dissipated per transistor
 else
     Power_diss = 0;
 end

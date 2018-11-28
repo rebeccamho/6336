@@ -322,3 +322,9 @@ tempLow = str2double(get(handles.tempLowBox,'String'));
 tempHigh = str2double(get(handles.tempHighBox,'String'));
 setTempScale(1,tempLow,tempHigh);
 caxis(ax,[tempLow tempHigh]);
+
+ax = handles.ssPlot;
+setTempScale(1,tempLow,tempHigh);
+caxis(ax,[tempLow tempHigh]);
+
+
