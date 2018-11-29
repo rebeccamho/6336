@@ -146,8 +146,8 @@ dt = str2double(get(handles.dtBox,'String'));
 [nMatLayers,materialLayers] = getIClayers();
 
 if initialRun  % first time running simulation
-    [~,nLayers,nPoints,~] = getGlobalVars;
-    setGlobalVars(0,nLayers,nPoints,Tstart,redOrder); 
+    [~,nLayers,nPoints,~,~,nPointsVia] = getGlobalVars;
+    setGlobalVars(0,nLayers,nPoints,Tstart,redOrder,nPointsVia); 
     x_start = initializeNodes(nLayers,nPoints,Tstart,redOrder);
     setInitialParams(x_start,0); % set initial x and t
 end

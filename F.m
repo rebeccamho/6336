@@ -35,7 +35,6 @@ d2d = [-N -1 0 1 N];
 A2d = sparse(N*nLayers,N*nLayers);
 B2d = zeros(min(size(A2d)),length(d2d));
 % bands
-%B2d(1:40,1) = -kr(11:end); %vertical
 B2d(:,1) = -kr; B2d(:,5) = -kr; % vertical cxns
 B2d(:,2) = -kr; B2d(:,4) = -kr; % horizontal cxns
 for i = N:N:min(size(A2d)) % horizontal cxns, 0 every N bc of edge

@@ -10,13 +10,18 @@ v = convertCharsToStrings('Via');
 
 % EDIT HERE
 Tstart = 298;  % room temp
-nLayers = 20;
-nPoints = 20;
+nLayers = 42;
+nPoints = 42;
+nPointsVia = 2;
 reduce = 0;
-layers = [v];  % set layers top to bottom
+layers = [v g];  % set layers top to bottom
 % END EDIT
 
-setGlobalVars(1,nLayers,nPoints,Tstart,reduce);
+% assert nPointsVia and nPoints #s are compatible
+assert(mod(nPoints,nPointsVia) == 0, '# points is not a multiple of number of points in a via!');
+assert(mod(nPoints/nPointsVia,2) ~= 0, 'need an odd # of vias! increase # points by # points in a via');
+
+setGlobalVars(1,nLayers,nPoints,Tstart,reduce,nPointsVia);
 setIClayers(0,[]);
 setTempScale(0,298,298);
 

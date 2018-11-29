@@ -5,16 +5,18 @@
 % Inputs: x (1 if first time running sim, 0 otherwise), y (# layers), z
 % (# points), t (initial temperature).
 
-function setGlobalVars(x,y,z,t,r)
+function setGlobalVars(x,y,z,t,r,n)
 
 global initialRun;
 global nLayers;
 global nPoints;
 global Tstart;
 global reduce; 
+global nPointsVia;
 
 initialRun = x;
 nLayers = y;
 nPoints = z;
 Tstart = t;
 reduce = r; 
+nPointsVia = n;

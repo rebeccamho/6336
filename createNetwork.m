@@ -33,9 +33,10 @@ thickness.(Via) = 0.02;
 
 chipW = 0.1;
 viaW = 0.005; % horizontal thickness of metal via
+%pts_via = 2; % for debugging
 
-[~,~,~,Tstart] = getGlobalVars; % Room temperature 
-T0 = 298;  % temp of heat sink (K)
+[~,~,~,Tstart,~,pts_via] = getGlobalVars; % Room temperature 
+T0 = 290;  % temp of heat sink (K)
 
 %% Calculate chip height and make sure the discretization can accomodate for thinnest layer
 nUniqueLayers = length(materialLayers);
@@ -123,7 +124,7 @@ for i = 1:nUniqueLayers
     if convertCharsToStrings(m) == 'Via'
         metal = 0;  % alternate btwn metal and oxide
         num_vias = chipW/viaW;  % num of vias in layer
-        pts_via = floor(nPoints/num_vias); % number of point in via
+        %pts_via = floor(nPoints/num_vias); % number of point in via
         v_layer = zeros(1,nPoints);
         for j = 1:pts_via:nPoints  % make sure vias don't wrap around layers
             if j+pts_via-1 < nPoints
