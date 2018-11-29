@@ -16,6 +16,7 @@ Cu = 'Copper';
 Gr = 'Graphene';
 Air = 'Air';
 Ox = 'Oxide'; % SiO2
+Via = 'Via';
 
 % nLayers = 40;
 % nPoints = 40;
@@ -28,8 +29,10 @@ thickness.(Si) = 0.005; % 0.025
 thickness.(Cu) = 0.02;
 thickness.(Gr) = 0.005; % 0.005
 thickness.(Ox) = 0.025;
+thickness.(Via) = 0.02;
 
 chipW = 0.1;
+viaW = 0.005; % horizontal thickness of metal via
 
 [~,~,~,Tstart] = getGlobalVars; % Room temperature 
 T0 = 298;  % temp of heat sink (K)
@@ -105,6 +108,7 @@ plotColor.(Cu) = 2;
 plotColor.(Gr) = 3;
 plotColor.(Ox) = 4; 
 plotColor.(Air) = 5;
+plotColor.(Via) = 6;
 
 for i = 1:nUniqueLayers
     m = materialLayers{i};
@@ -113,10 +117,34 @@ for i = 1:nUniqueLayers
     if i == nUniqueLayers 
         endIndex = nLayers;
     end
-    if convertCharsToStrings(m) == 'Graphene'
+    if convertCharsToStrings(m) == 'Graphene'  % note where Gr layers are
         graphene_i(startIndex:endIndex) = 1;
     end
-    p(startIndex:endIndex,:) = pVals.(m); 
+    if convertCharsToStrings(m) == 'Via'
+        metal = 0;  % alternate btwn metal and oxide
+        num_vias = chipW/viaW;  % num of vias in layer
+        pts_via = floor(nPoints/num_vias); % number of point in via
+        v_layer = zeros(1,nPoints);
+        for j = 1:pts_via:nPoints  % make sure vias don't wrap around layers
+            if j+pts_via-1 < nPoints
+                jend = j+pts_via-1;
+            else
+                jend = nPoints;
+            end
+            if metal
+                v_layer(j:jend) = pVals.(Cu);
+                metal = 0;
+            else
+                v_layer(j:jend) = pVals.(Ox);
+                metal = 1;
+            end
+        end
+        for k = startIndex:endIndex
+            p(k,:) = v_layer;
+        end
+    else  %% all values consistent across layer
+        p(startIndex:endIndex,:) = pVals.(m); 
+    end
     plotLayers(startIndex:endIndex,:) = plotColor.(m);
     startIndex = endIndex + 1; 
 end 
