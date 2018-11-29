@@ -28,9 +28,9 @@ t = t_i;
 phi(:,1) = phi_i;
 
 pVisualize.time = t;
-if ~isempty(varargin)
+if ~isempty(varargin) && freq ~= 0
     visualizeNetwork(phi(:,1),pVisualize,varargin{1});
-else
+elseif freq ~= 0
     visualizeNetwork(phi(:,1),pVisualize);
 end
 
@@ -48,7 +48,7 @@ while t<t_f
     gamma = phi_prev + dt/2*F;
     t = t+dt;
     ftrap = @(phi)trapezoidalSolve(f,t,dt,phi,gamma);
-    phi(:,i) = C'*newtonNd(ftrap,phi_prev);
+    phi(:,i) = newtonNd(ftrap,phi_prev);
     
     %Calculate Tchange to determine new dt. 
     if i > 1

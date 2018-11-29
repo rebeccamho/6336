@@ -23,7 +23,8 @@ Ox = 'Oxide'; % SiO2
 % materialLayers = [{Cu} {Gr} {Si}]; % list materials from top to bottom
 
 thickness = struct; 
-thickness.(Si) = 0.025; % 0.025
+thickness.(Si) = 0.005; % 0.025
+% thickness.(Bond) = 0.05;
 thickness.(Cu) = 0.02;
 thickness.(Gr) = 0.005; % 0.005
 thickness.(Ox) = 0.025;
@@ -31,7 +32,7 @@ thickness.(Ox) = 0.025;
 chipW = 0.1;
 
 [~,~,~,Tstart] = getGlobalVars; % Room temperature 
-T0 = 273;  % temp of heat sink (K)
+T0 = 298;  % temp of heat sink (K)
 
 %% Calculate chip height and make sure the discretization can accomodate for thinnest layer
 nUniqueLayers = length(materialLayers);
@@ -78,12 +79,19 @@ dens.(Ox) = 2.65e3;
 
 % Calculate p values
 pVals = struct; 
-pVals.(Si) = k.(Si)/(dens.(Si)*hc.(Si));
-pVals.(Cu) = k.(Cu)/(dens.(Cu)*hc.(Cu));
-pVals.(Gr) = k.(Gr)/(dens.(Gr)*hc.(Gr));
+pVals.(Si) = (k.(Si)/(dens.(Si)*hc.(Si)));
+pVals.(Cu) = (k.(Cu)/(dens.(Cu)*hc.(Cu)));
+pVals.(Gr) = (k.(Gr)/(dens.(Gr)*hc.(Gr)));
 pVals.(Air) = k.(Air)/(dens.(Air)*hc.(Air));
 pVals.(Ox) = k.(Ox)/(dens.(Ox)*hc.(Ox));
 
+
+% pVals = struct; 
+% pVals.(Si) = 1/(k.(Si));
+% pVals.(Bond) = 1/(k.(Bond));
+% pVals.(Cu) = 1/(k.(Cu));
+% pVals.(Gr) = 1/(k.(Gr));
+% pVals.(Air) = k.(Air);
 %% Construct parameters (p) matrix
 p = zeros(nLayers,nPoints);
 graphene_i = zeros(nLayers,1);

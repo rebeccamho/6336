@@ -5,7 +5,7 @@
 % otherParams (contains parameters related to IC structure). 
 % Outputs: dx_dt (rate of change over time), A_mat (A matrix), B (B vector,
 % represents inputs to system).
-function [dx_dt,A_mat,B,C] = F(x,u,p,otherParams)
+function [dx_dt,A_mat,B,C] = F(x,u,p,reduce,otherParams)
 chipW = otherParams.chipW;
 chipH = otherParams.chipH;
 nLayers= size(p,1);
@@ -125,10 +125,17 @@ for i = 1:nLayers
 end
 
 %% Construct C matrix
-C = eye(nLayers*nPoints);
+% C = eye(nLayers*nPoints);
+C = ones(nLayers*nPoints,1);
 
-%% Plot Matrix A_2D
+%% State Space Model
 A_mat = A2d;
 U_vec = B*u';
 
-dx_dt = A2d*x+B*u'; 
+if ~reduce
+    dx_dt = A2d*x+B*u'; 
+else 
+    dx_dt = 0;
+end
+
+

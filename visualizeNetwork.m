@@ -2,7 +2,7 @@ function visualizeNetwork(x,p,varargin)
 
 if ~isempty(varargin)
     h = varargin{1};
-    ax = varargin{1}.tempPlot;
+    ax = h.tempPlot;
     X = reshape(x(:,end),p.nPoints,p.nLayers)';
     imagesc(ax,X);
     map = colorcet('D1');
@@ -41,9 +41,11 @@ else
     xlabel('node');
     ylabel('material layer');
     title(['t = ' num2str(p.time) ' s']);
-    set(gca,'ytick',p.startLayers,'yticklabel',p.materialLayers,'fontsize',18)
+    set(gca,'ytick',p.startLayers,'yticklabel',p.materialLayers,'fontsize',12)
     colorbar;
     drawnow;
+    movegui(gcf,'northeast');
+
 end
 
 end
