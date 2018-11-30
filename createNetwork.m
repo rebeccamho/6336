@@ -36,7 +36,7 @@ viaW = 0.005; % horizontal thickness of metal via
 %pts_via = 2; % for debugging
 
 [~,~,~,Tstart,~,pts_via] = getGlobalVars; % Room temperature 
-T0 = 290;  % temp of heat sink (K)
+T0 = 298;  % temp of heat sink (K)
 
 %% Calculate chip height and make sure the discretization can accomodate for thinnest layer
 nUniqueLayers = length(materialLayers);

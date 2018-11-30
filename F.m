@@ -94,8 +94,10 @@ A2d = -1*A2d;
 B = zeros(nPoints*nLayers,size(u,2)) ;
 
 % TRANSISTOR HEAT SOURCE
-%First layer, experiencing transistors heating up.
-B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,1) = B((1+(nLayers-1)*(nPoints)):nPoints*nLayers,1)+1; 
+%right above bottom graphene layer, experiencing transistors heating up.
+not_gr = find(gr_i == 0);
+heatLayer = max(not_gr);  % layer right above bottom layer of graphene
+B((1+(heatLayer-2)*(nPoints)):nPoints*heatLayer,1) = B((1+(heatLayer-2)*(nPoints)):nPoints*heatLayer,1)+1; 
 
 % X-DIR AIR LEAKAGE
 %Left Edge, leakage to air. 

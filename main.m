@@ -10,16 +10,18 @@ v = convertCharsToStrings('Via');
 
 % EDIT HERE
 Tstart = 298;  % room temp
-nLayers = 42;
-nPoints = 42;
+nLayers = 22;
+nPoints = 22;
 nPointsVia = 2;
 reduce = 0;
-layers = [v g];  % set layers top to bottom
+layers = [g c s];  % set layers top to bottom, keep g on bottom
 % END EDIT
 
 % assert nPointsVia and nPoints #s are compatible
 assert(mod(nPoints,nPointsVia) == 0, '# points is not a multiple of number of points in a via!');
 assert(mod(nPoints/nPointsVia,2) ~= 0, 'need an odd # of vias! increase # points by # points in a via');
+% assert IC structure is compatible with heat source location
+assert(max(find(layers == g)) ~= 1,'cannot have the only graphene layer be on the top of IC, add graphene layer below or remove top graphene layer');
 
 setGlobalVars(1,nLayers,nPoints,Tstart,reduce,nPointsVia);
 setIClayers(0,[]);
