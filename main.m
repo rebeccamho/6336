@@ -14,14 +14,16 @@ nLayers = 22;
 nPoints = 22;
 nPointsVia = 2;
 reduce = 0;
-layers = [g c s];  % set layers top to bottom, keep g on bottom
+layers = [c s g];  % set layers top to bottom, keep g on bottom
 % END EDIT
 
 % assert nPointsVia and nPoints #s are compatible
 assert(mod(nPoints,nPointsVia) == 0, '# points is not a multiple of number of points in a via!');
 assert(mod(nPoints/nPointsVia,2) ~= 0, 'need an odd # of vias! increase # points by # points in a via');
 % assert IC structure is compatible with heat source location
-assert(max(find(layers == g)) ~= 1,'cannot have the only graphene layer be on the top of IC, add graphene layer below or remove top graphene layer');
+if ~isempty(find(layers == g))
+    assert(max(find(layers == g)) ~= 1,'cannot have the only graphene layer be on the top of IC, add graphene layer below or remove top graphene layer');
+end
 
 setGlobalVars(1,nLayers,nPoints,Tstart,reduce,nPointsVia);
 setIClayers(0,[]);
