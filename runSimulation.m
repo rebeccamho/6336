@@ -39,18 +39,22 @@ title(ax,'Steady State');
 set(ax,'ytick',startLayers,'yticklabel',materialLayers,'fontsize',12)
 colorbar(ax);
 
-% plot steady state temperature profile
-SS = -A\(B*u');
-ax = handles.ssPlot;
-SS = reshape(SS,nPoints,nLayers)';
-imagesc(ax,SS);
-map = colorcet('D1');
-colormap(ax,map);
-xlabel(ax,'node');
-ylabel(ax,'material layer');
-title(ax,'Steady State');
-set(ax,'ytick',startLayers,'yticklabel',materialLayers,'fontsize',12)
-colorbar(ax);
+maxTemp = num2str(max(max(SS)));
+set(handles.maxTempValue,'String',maxTemp);
+drawnow;
+
+% % plot steady state temperature profile
+% SS = -A\(B*u');
+% ax = handles.ssPlot;
+% SS = reshape(SS,nPoints,nLayers)';
+% imagesc(ax,SS);
+% map = colorcet('D1');
+% colormap(ax,map);
+% xlabel(ax,'node');
+% ylabel(ax,'material layer');
+% title(ax,'Steady State');
+% set(ax,'ytick',startLayers,'yticklabel',materialLayers,'fontsize',12)
+% colorbar(ax);
 
 %% Run trapezoidal script. 
 pVisualize = struct; 

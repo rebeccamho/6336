@@ -20,9 +20,9 @@ if ~isempty(varargin)
     
     drawnow;
     
-    maxTemp = num2str(max(max(X)));
-    set(h.maxTempValue,'String',maxTemp);
-    drawnow;
+%     maxTemp = num2str(max(max(X)));
+%     set(h.maxTempValue,'String',maxTemp);
+%     drawnow;
     
 else   
     figure(p.figNum);
