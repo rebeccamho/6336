@@ -122,9 +122,7 @@ for i = 1:nUniqueLayers
         graphene_i(startIndex:endIndex) = 1;
     end
     if convertCharsToStrings(m) == 'Via'
-        metal = 0;  % alternate btwn metal and oxide
-        num_vias = chipW/viaW;  % num of vias in layer
-        %pts_via = floor(nPoints/num_vias); % number of point in via
+        metal = 1;  % alternate btwn metal and oxide
         v_layer = zeros(1,nPoints);
         for j = 1:pts_via:nPoints  % make sure vias don't wrap around layers
             if j+pts_via-1 < nPoints
