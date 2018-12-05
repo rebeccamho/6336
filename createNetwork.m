@@ -24,15 +24,15 @@ Via = 'Via';
 % materialLayers = [{Cu} {Gr} {Si}]; % list materials from top to bottom
 
 thickness = struct; 
-thickness.(Si) = 0.005; % 0.025
+thickness.(Si) = 60e-9; % 0.025
 % thickness.(Bond) = 0.05;
-thickness.(Cu) = 0.02;
-thickness.(Gr) = 0.005; % 0.005
+thickness.(Cu) = 100e-9;
+thickness.(Gr) = 1e-9; % 0.005
 thickness.(Ox) = 0.025;
-thickness.(Via) = 0.02;
+thickness.(Via) = 10e-9;
 
-chipW = 0.1;
-viaW = 0.005; % horizontal thickness of metal via
+chipW = 10e-6;
+viaW = 100e-9; % horizontal thickness of metal via
 %pts_via = 2; % for debugging
 
 [~,~,~,Tstart,~,pts_via] = getGlobalVars; % Room temperature 
@@ -148,7 +148,7 @@ for i = 1:nUniqueLayers
     startIndex = endIndex + 1; 
 end 
 
-plotIC(plotLayers,startLayers,materialLayers,3,handles);
+plotIC(plotLayers,startLayers,materialLayers,3,handles,chipW,chipH);
 
 %% Construct source (u) vector. 
 % SOURCES:
@@ -157,7 +157,7 @@ plotIC(plotLayers,startLayers,materialLayers,3,handles);
 % graphene layers
 
 if transState
-    Power_diss = 2e9; %Units [W/m^3], Power dissipated per transistor
+    Power_diss = 5e19; %Units [W/m^3], Power dissipated per transistor
 else
     Power_diss = 0;
 end

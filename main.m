@@ -10,8 +10,8 @@ v = convertCharsToStrings('Via');
 
 % EDIT HERE
 Tstart = 298;  % room temp
-nLayers = 82;
-nPoints = 42;
+nLayers = 50;
+nPoints = 22;
 nPointsVia = 2;
 reduce = 0;
 layers = [c v s g];  % set layers top to bottom, keep g on bottom

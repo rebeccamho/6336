@@ -22,7 +22,7 @@ function varargout = build_IC_gui(varargin)
 
 % Edit the above text to modify the response to help build_IC_gui
 
-% Last Modified by GUIDE v2.5 25-Nov-2018 18:07:46
+% Last Modified by GUIDE v2.5 05-Dec-2018 11:34:38
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -326,5 +326,3 @@ caxis(ax,[tempLow tempHigh]);
 ax = handles.ssPlot;
 setTempScale(1,tempLow,tempHigh);
 caxis(ax,[tempLow tempHigh]);
-
-

@@ -5,7 +5,7 @@
 % otherParams (contains parameters related to IC structure). 
 % Outputs: dx_dt (rate of change over time), A_mat (A matrix), B (B vector,
 % represents inputs to system).
-function [dx_dt,A_mat,B,C] = F(x,u,p,reduce,otherParams)
+function [dx_dt,A_mat,B,C,P] = F(x,u,p,reduce,otherParams)
 chipW = otherParams.chipW;
 chipH = otherParams.chipH;
 nLayers= size(p,1);
@@ -125,16 +125,30 @@ for i = 1:nLayers
     end
 end
 
+%% preconditioners 
+% Jacobi preconditioner
+% A2d_tilde =  diag(A2d);
+% P = sparse((1:size(A2d,1)),(1:size(A2d,2)),(1./A2d_tilde)); 
+
+% Outer diagonals preconditioner
+% allDiags = spdiags(A2d);
+% centerDiags = allDiags(:,2:4);
+% P = spdiags(centerDiags,[-1 0 1],size(A2d,1),size(A2d,2));
+% P = P\eye(size(A2d,1));
+
+% No preconditioner
+P = eye(size(A2d));
+
 %% Construct C matrix
 % C = eye(nLayers*nPoints);
 C = ones(nLayers*nPoints,1);
 
 %% State Space Model
 A_mat = A2d;
-U_vec = B*u';
+U_vec = (B*u');
 
 if ~reduce
-    dx_dt = A2d*x+B*u'; 
+    dx_dt = A2d*x+(B*u'); 
 else 
     dx_dt = 0;
 end

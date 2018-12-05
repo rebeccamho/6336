@@ -1,4 +1,4 @@
-function [xf, x] = newtonNd(fhand,x0)
+function [xf, x] = newtonNd(fhand,x0,P)
 % function newton1d(fhand,x0,itpause)
 % from 6.336 Problem Set 4 Solutions Code
 % 
@@ -16,15 +16,15 @@ function [xf, x] = newtonNd(fhand,x0)
 % number of Newton steps that are plotted sequentially
 % pauses between sub-steps.
 
-tolf = 1e-8;         % function convergence tolerance
-tolx = 1e-8;          % step convergence tolerance
+tolf = 1e-9;         % function convergence tolerance
+tolx = 1e-9;          % step convergence tolerance
 maxIters = 500;       % max # of iterations
 x00 = x0;             % initial guess
 
 % Newton loop
 for iter = 1:maxIters
     [f, J] = fhand(x0);          % evaluate function
-    dx = -J\f;                   % solve linear system
+    dx = (-J\f);                   % solve linear system
     nf(iter) = norm(f,Inf);      % norm of f at step k+1
     ndx(iter) = norm(dx,Inf);    % norm of dx at step k+1
     x(:,iter) = x0 + dx;         % solution x at step k+1
