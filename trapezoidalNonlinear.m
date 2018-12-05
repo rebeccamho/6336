@@ -1,4 +1,4 @@
-function [x,t] = trapezoidalNonlinear(C,xi,ti,tf,dt,f,freq,pVisualize,varargin)
+function [x,t,Tchange] = trapezoidalNonlinear(C,xi,ti,tf,dt,f,freq,pVisualize,varargin)
 
 iter = (tf-ti)/dt;
 t = ti; 
@@ -22,6 +22,10 @@ for i = 2:iter+1
     ftrap = @(x)trapezoidalSolve(f,t,dt,x,gamma);
     x(:,i) = C.*newtonNd(ftrap,x_prev);
     
+    %Calculate Tchange and store value. 
+    if i > 1
+        Tchange(i) = max(max(abs(x(:,i)-x(:,i-1)))); %Calculate Tchange. 
+    end
     
     count = count + 1;
     if count >= freq

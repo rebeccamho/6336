@@ -24,10 +24,10 @@ materialLayers = otherParams.materialLayers;
 startLayers = otherParams.startLayers;
 
 % construct A, B, and C matrices
-[~,A,B,C] = F(x_start,u,p,reduce,otherParams); 
+[~,A,B,C,P] = F(x_start,u,p,reduce,otherParams); 
 
 % plot steady state temperature profile
-SS = -A\(B*u');
+SS = -P*A\(P*B*u');
 ax = handles.ssPlot;
 SS = reshape(SS,nPoints,nLayers)';
 imagesc(ax,SS);
@@ -39,7 +39,9 @@ title(ax,'Steady State');
 set(ax,'ytick',startLayers,'yticklabel',materialLayers,'fontsize',12)
 colorbar(ax);
 
-maxTemp = num2str(max(max(SS)));
+maxTempVal = max(max(SS));
+minTempVal = min(min(SS));
+maxTemp = num2str(maxTempVal);
 set(handles.maxTempValue,'String',maxTemp);
 drawnow;
 
@@ -63,6 +65,8 @@ pVisualize.time = t_stop;
 pVisualize.figNum = 10;
 pVisualize.materialLayers = materialLayers;
 pVisualize.startLayers = startLayers;
+pVisualize.maxTemp = maxTempVal;
+pVisualize.minTemp = minTempVal;
 
 % sysOriginal = ss(full(A),B*u',C',0);
 
@@ -94,12 +98,14 @@ end
 % X = ForwardEuler('F',x_start,eval_u,p,t_start,t_stop,timestep,1,200);
 
 if reduce
-    fhand = @(x,t)fj2DIC(x,t,A,B);
+%     fhand = @(x,t)fj2DIC(x,t,A,B);
+    fhand = @(x,t)fj2DIC(x,t,P*A,P*B);
 else
-    fhand = @(x,t)fj2DIC(x,t,A,B*u');
+%     fhand = @(x,t)fj2DIC(x,t,A,(B*u'));
+    fhand = @(x,t)fj2DIC(x,t,P*A,P*(B*u'));
 end
-% [x_trap,tf] = trapezoidalNonlinear(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
-[x_trap,tf] = trapezoidalNonlinear_dynamic(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
+% [x_trap,tf,Tchange] = trapezoidalNonlinear(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
+[x_trap,tf,Tchange,dt_vec] = trapezoidalNonlinear_dynamic(C,P,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
 % x_trap = C'*x_trap;
 x_trapFinal = C.*x_trap(:,end);
 setInitialParams(x_trapFinal,tf);
@@ -107,3 +113,6 @@ setInitialParams(x_trapFinal,tf);
 % maxTemp = num2str(max(x_trapFinal));
 % set(handles.maxTempValue,'String',maxTemp);
 % drawnow;
+
+% figure(10); plot(Tchange(2:end))
+% figure(11); plot(dt_vec(2:end))

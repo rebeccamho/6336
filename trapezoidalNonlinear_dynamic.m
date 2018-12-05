@@ -1,16 +1,16 @@
-function [phi,t,Tchange,dt_vec] = trapezoidalNonlinear_dynamic(C,phi_i,t_i,t_f,dt,f,freq,pVisualize,varargin)
+function [phi,t,Tchange,dt_vec] = trapezoidalNonlinear_dynamic(C,P,phi_i,t_i,t_f,dt,f,freq,pVisualize,varargin)
 % This function implements the trapezoidal method, but with varying dt
 % depending how fast the temperatures of the system are changing. 
 
 %% Define max_dt, max_Tchange, min_dt, and min_Tchange. 
 %We will scale the dt linearly based on the change we see in T at every
 %timestep. 
-max_dt = 1e-3; % Max_dt before see instablity (Task B Part 1)
+max_dt = 10e-17; % Max_dt before see instablity (Task B Part 1)
 % max_dt = 1; 
-max_Tchange = 1.2268e-4; %maximum change in T in time step when dt = 1e-3. 
+max_Tchange = 1.2268e-2; %maximum change in T in time step when dt = 1e-3. 
 
-min_dt = 1e-5; %Used to obtain reference. 
-min_Tchange = 1.2268e-06; %maximum change in T in time step when dt = 1e-5
+min_dt = 1e-12; %Used to obtain reference. 
+min_Tchange = 1.2268e-4; %maximum change in T in time step when dt = 1e-5
 
 %We will make a y = mx+b where x is the Tchange per time step, and y is hte
 %dt that will correspond to that Tchange. In essence, for large Tchanges,
@@ -48,22 +48,23 @@ while t<t_f
     gamma = phi_prev + dt/2*F;
     t = t+dt;
     ftrap = @(phi)trapezoidalSolve(f,t,dt,phi,gamma);
-    phi(:,i) = newtonNd(ftrap,phi_prev);
+    phi(:,i) = newtonNd(ftrap,phi_prev,P);
     
     %Calculate Tchange to determine new dt. 
     if i > 1
-        Tchange(i) = max(max(abs(phi(:,i)-phi(:,i-1)))); %Calculate Tchange. 
+        Tchange(i) =max(max(abs(phi(:,i)-phi(:,i-1)))); %Calculate Tchange. 
         if Tchange(i)>Tchange(i-1) 
-            dt = dt-dt_change; %if we see bigger increases in than previous iteration, decrease dt. 
+            dt = dt-dt_change; %if we see bigger increases in T than previous iteration, decrease dt. 
+            
         else 
-            dt = dt+dt_change; %if we see small increases, then increase dt. 
+            dt = dt+dt_change; %if we see small increases, then incresae dt. 
         end
 %         
 %         dt = m*(Tchange(i))+b; %Calculate new dt and store. 
 %         if dt<0 %special case when dt is less than zero, if Tchange really big. 
 %             dt = min_dt;
 %         end
-        dt_vec(i) = dt; %Update dt. 
+        dt_vec(i) = dt;  %Update dt. 
     end
     
     

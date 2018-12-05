@@ -12,6 +12,7 @@ if ~isempty(varargin)
     title(ax,['t = ' num2str(p.time) ' s']);
     set(ax,'ytick',p.startLayers,'yticklabel',p.materialLayers,'fontsize',12)
     colorbar(ax);
+    caxis(ax,[p.minTemp p.maxTemp]);
     
     [f,tLow,tHigh] = getTempScale();
     if f == 1

@@ -10,7 +10,7 @@ v = convertCharsToStrings('Via');
 
 % EDIT HERE
 Tstart = 298;  % room temp
-nLayers = 22;
+nLayers = 50;
 nPoints = 22;
 nPointsVia = 2;
 reduce = 0;
