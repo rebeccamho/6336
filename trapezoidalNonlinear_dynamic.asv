@@ -59,16 +59,12 @@ while t<t_f
         if Tchange(i)>Tchange(i-1) 
            
             %FAST DYNAMICS
-            dt = dt-dt_change*counter_fast; %if we see bigger increases in T than previous iteration, decrease dt. 
+            dt = dt-dt_change; %if we see bigger increases in T than previous iteration, decrease dt. 
            counter_fast = counter_fast+1;
         else 
             %SLOW DYNAMICS
-            dt = dt+dt_change*counter_slow^8; %if we see small increases, then incresae dt. 
+            dt = dt+dt_change; %if we see small increases, then incresae dt. 
             counter_slow = counter_slow+1;
-            if dt>10e-12
-                dt = 10e-12;
-            end
-           
         end
 %         
 %         dt = m*(Tchange(i))+b; %Calculate new dt and store. 

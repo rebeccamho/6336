@@ -135,5 +135,5 @@ setInitialParams(x_trapFinal,tf);
 % set(handles.maxTempValue,'String',maxTemp);
 % drawnow;
 
-% figure(10); plot(Tchange(2:end))
-% figure(11); plot(dt_vec(2:end))
+figure(10); plot(Tchange(2:end))
+figure(11); plot(dt_vec(2:end))
