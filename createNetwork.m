@@ -28,10 +28,10 @@ thickness.(Si) = 60e-9; % 0.025
 % thickness.(Bond) = 0.05;
 thickness.(Cu) = 100e-9;
 thickness.(Gr) = 1e-9; % 0.005
-thickness.(Ox) = 0.025;
-thickness.(Via) = 10e-9;
+thickness.(Ox) = 25e-9;
+thickness.(Via) = 75e-9;
 
-chipW = 10e-6;
+chipW = 1e-3;
 viaW = 100e-9; % horizontal thickness of metal via
 %pts_via = 2; % for debugging
 
@@ -63,7 +63,7 @@ hc.(Si) = 0.7e3;
 hc.(Cu) = 0.385e3;
 hc.(Gr) = 0.7e3; % Graphite specific heat used instead of graphene
 hc.(Air) = 1e3;
-hc.(Ox) = 1e3;
+hc.(Ox) = 0.7e3;
 
 % Thermal conductivity , units W/(m*K)
 k = struct;
@@ -71,7 +71,7 @@ k.(Si) = 155;
 k.(Cu) = 400; 
 k.(Gr) = 5000; 
 k.(Air) = 0.02; 
-k.(Ox) = 1.2;
+k.(Ox) = 100;
 
 % Density, untis kg/m^3
 dens = struct;
@@ -79,7 +79,7 @@ dens.(Si) = 2.329e3;
 dens.(Cu) = 8.92e3; 
 dens.(Gr) = 2.267e3;
 dens.(Air) = 1.225; 
-dens.(Ox) = 2.65e3;
+dens.(Ox) = 2.41e3;
 
 % Calculate p values
 pVals = struct; 
@@ -88,7 +88,6 @@ pVals.(Cu) = (k.(Cu)/(dens.(Cu)*hc.(Cu)));
 pVals.(Gr) = (k.(Gr)/(dens.(Gr)*hc.(Gr)));
 pVals.(Air) = k.(Air)/(dens.(Air)*hc.(Air));
 pVals.(Ox) = k.(Ox)/(dens.(Ox)*hc.(Ox));
-
 
 % pVals = struct; 
 % pVals.(Si) = 1/(k.(Si));
@@ -159,7 +158,7 @@ plotIC(plotLayers,startLayers,materialLayers,3,handles,chipW,chipH);
 % graphene layers
 
 if transState
-    Power_diss = 5e19; %Units [W/m^3], Power dissipated per transistor
+    Power_diss = 5e20; %Units [W/m^3], Power dissipated per transistor
 else
     Power_diss = 0;
 end

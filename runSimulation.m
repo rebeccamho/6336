@@ -24,12 +24,32 @@ materialLayers = otherParams.materialLayers;
 startLayers = otherParams.startLayers;
 
 % construct A, B, and C matrices
-[~,A,B,C,P] = F(x_start,u,p,reduce,otherParams); 
+[~,A,B,C] = F(x_start,u,p,reduce,otherParams); 
+
+% preconditioners 
+% Jacobi preconditioner
+A_tilde =  diag(A);
+P = sparse((1:size(A,1)),(1:size(A,2)),(1./A_tilde)); 
+
+% Outer diagonals preconditioner
+% allDiags = spdiags(A2d);
+% centerDiags = allDiags(:,2:4);
+% P = spdiags(centerDiags,[-1 0 1],size(A2d,1),size(A2d,2));
+% P = P\eye(size(A2d,1));
+
+% No preconditioner
+% P = eye(size(A2d));
+
+% use GCR to compute steady state temperature profile
+tol = 1e-4;
+maxiters = 500;
+[SS, r_norms] = tgcr(P*A,P*B*u',tol,maxiters);
+SS = -reshape(SS,nPoints,nLayers)';
 
 % plot steady state temperature profile
-SS = -P*A\(P*B*u');
+% SS = -P*A\(P*B*u');
+% SS = reshape(SS,nPoints,nLayers)';
 ax = handles.ssPlot;
-SS = reshape(SS,nPoints,nLayers)';
 imagesc(ax,SS);
 map = colorcet('D1');
 colormap(ax,map);
@@ -45,18 +65,19 @@ maxTemp = num2str(maxTempVal);
 set(handles.maxTempValue,'String',maxTemp);
 drawnow;
 
-% % plot steady state temperature profile
-% SS = -A\(B*u');
-% ax = handles.ssPlot;
-% SS = reshape(SS,nPoints,nLayers)';
-% imagesc(ax,SS);
+
+% figure(5);
+% imagesc(SS);
 % map = colorcet('D1');
-% colormap(ax,map);
-% xlabel(ax,'node');
-% ylabel(ax,'material layer');
-% title(ax,'Steady State');
-% set(ax,'ytick',startLayers,'yticklabel',materialLayers,'fontsize',12)
-% colorbar(ax);
+% colormap(map);
+% xlabel('node');
+% ylabel('material layer');
+% title('Steady State');
+% set(gca,'ytick',startLayers,'yticklabel',materialLayers,'fontsize',12)
+% colorbar;
+% saveas(gcf,'ss_graphene','png');
+
+
 
 %% Run trapezoidal script. 
 pVisualize = struct; 
@@ -98,11 +119,11 @@ end
 % X = ForwardEuler('F',x_start,eval_u,p,t_start,t_stop,timestep,1,200);
 
 if reduce
-%     fhand = @(x,t)fj2DIC(x,t,A,B);
-    fhand = @(x,t)fj2DIC(x,t,P*A,P*B);
+    fhand = @(x,t)fj2DIC(x,t,A,B);
+%     fhand = @(x,t)fj2DIC(x,t,P*A,P*B);
 else
-%     fhand = @(x,t)fj2DIC(x,t,A,(B*u'));
-    fhand = @(x,t)fj2DIC(x,t,P*A,P*(B*u'));
+    fhand = @(x,t)fj2DIC(x,t,A,(B*u'));
+%     fhand = @(x,t)fj2DIC(x,t,P*A,P*(B*u'));
 end
 % [x_trap,tf,Tchange] = trapezoidalNonlinear(C,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
 [x_trap,tf,Tchange,dt_vec] = trapezoidalNonlinear_dynamic(C,P,x_start,t_start,t_stop,timestep,fhand,freq,pVisualize,handles);
