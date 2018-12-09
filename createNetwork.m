@@ -24,14 +24,14 @@ Via = 'Via';
 % materialLayers = [{Cu} {Gr} {Si}]; % list materials from top to bottom
 
 thickness = struct; 
-thickness.(Si) = 60e-9; % 0.025
+thickness.(Si) = 60e-5; % 0.025
 % thickness.(Bond) = 0.05;
-thickness.(Cu) = 100e-9;
-thickness.(Gr) = 1e-9; % 0.005
+thickness.(Cu) = 100e-5;
+thickness.(Gr) = 1e-5; % 0.005
 thickness.(Ox) = 0.025;
-thickness.(Via) = 10e-9;
+thickness.(Via) = 100e-5;
 
-chipW = 10e-6;
+chipW = 1e-2;
 viaW = 100e-9; % horizontal thickness of metal via
 %pts_via = 2; % for debugging
 
@@ -122,7 +122,7 @@ for i = 1:nUniqueLayers
         graphene_i(startIndex:endIndex) = 1;
     end
     if convertCharsToStrings(m) == 'Via'
-        metal = 0;  % alternate btwn metal and oxide
+        metal = 1;  % alternate btwn metal and oxide
         num_vias = chipW/viaW;  % num of vias in layer
         %pts_via = floor(nPoints/num_vias); % number of point in via
         v_layer = zeros(1,nPoints);
@@ -159,7 +159,7 @@ plotIC(plotLayers,startLayers,materialLayers,3,handles,chipW,chipH);
 % graphene layers
 
 if transState
-    Power_diss = 5e19; %Units [W/m^3], Power dissipated per transistor
+    Power_diss = 5e10; %Units [W/m^3], Power dissipated per transistor
 else
     Power_diss = 0;
 end

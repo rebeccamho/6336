@@ -14,7 +14,7 @@ nLayers = 50;
 nPoints = 22;
 nPointsVia = 2;
 reduce = 0;
-layers = [c s g];  % set layers top to bottom, keep g on bottom
+layers = [c v c s g];  % set layers top to bottom, keep g on bottom
 % END EDIT
 
 % assert nPointsVia and nPoints #s are compatible

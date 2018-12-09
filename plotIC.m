@@ -30,22 +30,25 @@ if length(varargin) < 2
     set(gca,'fontsize',12);
 
 else
-    xPoints = linspace(0,chipW*1e6,nPoints);
-    yPoints = linspace(0,chipH*1e9,nLayers);
-    imagesc(ax,xPoints,yPoints,plotLayers);
+%     xPoints = linspace(0,chipW*1e6,nPoints);
+%     yPoints = linspace(0,chipH*1e9,nLayers);
+%     imagesc(ax,xPoints,yPoints,plotLayers);
+    imagesc(ax,plotLayers);
     map = colorcet('L18');
     colormap(map);
     caxis(ax,[1 6])
 
     for i = 1:nUniqueLayers
         if materialLayers{i} == 'Graphene'
-            text(ax,0,startLayers(i)*chipH*1e9/nLayers-1,materialLayers{i},'fontsize',12);
+%             text(ax,0,startLayers(i)*chipH*1e9/nLayers-1,materialLayers{i},'fontsize',12);
+              text(ax,1,startLayers(i),materialLayers{i},'fontsize',12);
         else
-            text(ax,0,startLayers(i)*chipH*1e9/nLayers,materialLayers{i},'fontsize',12);
+%             text(ax,0,startLayers(i)*chipH*1e9/nLayers,materialLayers{i},'fontsize',12);
+                text(ax,1,startLayers(i),materialLayers{i},'fontsize',12);
         end
     end
 
-    xlabel(ax,'chip width (um)'); ylabel(ax,'chip height (nm)');
+    xlabel(ax,'node'); ylabel(ax,'material layer');
     set(ax,'FontSize',12);
 
 
