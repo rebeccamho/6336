@@ -31,7 +31,7 @@ thickness.(Gr) = 1e-9; % 0.005
 thickness.(Ox) = 25e-9;
 thickness.(Via) = 75e-9;
 
-chipW = 1e-3;
+chipW = 1e-6;
 viaW = 100e-9; % horizontal thickness of metal via
 %pts_via = 2; % for debugging
 

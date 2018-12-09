@@ -12,7 +12,10 @@ if ~isempty(varargin)
     title(ax,['t = ' num2str(p.time) ' s']);
     set(ax,'ytick',p.startLayers,'yticklabel',p.materialLayers,'fontsize',12)
     colorbar(ax);
-    caxis(ax,[p.minTemp p.maxTemp]);
+    
+    if h.transistorBox.Value == 1
+        caxis(ax,[p.minTemp p.maxTemp]);
+    end
     
     [f,tLow,tHigh] = getTempScale();
     if f == 1
